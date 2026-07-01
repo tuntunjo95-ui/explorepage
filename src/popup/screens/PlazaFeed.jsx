@@ -342,7 +342,7 @@ function PlazaComposer({ nav }) {
     <button className="plaza-composer" onClick={() => nav('post')}>
       <img src={meNav} alt="me" />
       <div>
-        <b>me</b>
+        <b>Joxon</b>
         <span>What's new today?</span>
       </div>
     </button>
