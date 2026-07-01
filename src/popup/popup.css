@@ -1925,9 +1925,9 @@ body {
     radial-gradient(120% 34% at 50% 100%, rgba(0,0,0,.25), rgba(255,255,255,0) 72%);
 }
 .media-viewer .statusbar {
-  height: 82px;
-  flex: 0 0 82px;
-  padding: 45px 31px 0 34px;
+  height: 74px;
+  flex: 0 0 74px;
+  padding: 39px 31px 0 34px;
   align-items: flex-start;
   box-sizing: border-box;
   text-shadow: 0 1px 12px rgba(0,0,0,.26);
@@ -1942,9 +1942,9 @@ body {
 .media-viewer .sb-wifi { width: 27px; height: 21px; transform: translateY(1px); }
 .media-viewer .sb-battery { width: 45px; height: 22px; transform: translateY(-1px); }
 .media-viewer-top {
-  flex: 0 0 105px;
+  flex: 0 0 92px;
   grid-template-columns: 70px 1fr 70px;
-  padding: 23px 24px 20px;
+  padding: 17px 24px 17px;
 }
 .media-viewer-close {
   width: 48px;
@@ -1993,36 +1993,36 @@ body {
 .media-viewer-stage {
   position: relative;
   flex: 1 1 auto;
-  padding: 16px 7px 32px;
+  padding: 0;
   box-sizing: border-box;
   z-index: 2;
 }
 .media-viewer-stage img,
 .media-viewer.image-viewer .media-viewer-stage img {
-  width: auto;
+  width: 100%;
   height: auto;
-  max-width: calc(100% - 12px);
-  max-height: min(48vh, 430px);
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  border-radius: 18px;
+  border-radius: 0;
   box-shadow: 0 2px 0 rgba(255,255,255,.24), 0 18px 42px rgba(0,0,0,.08);
   cursor: zoom-out;
 }
 .media-viewer-bottom {
-  flex: 0 0 212px;
-  padding: 16px 18px 41px;
-  gap: 22px;
+  flex: 0 0 178px;
+  padding: 14px 18px 35px;
+  gap: 17px;
   background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(153,153,153,.22) 28%, rgba(80,80,80,.28) 100%);
 }
 .media-viewer-actions {
-  gap: 28px;
-  min-height: 48px;
+  gap: 24px;
+  min-height: 40px;
 }
 .media-viewer-actions button {
-  min-width: 48px;
-  height: 48px;
-  gap: 8px;
-  font-size: 24px;
+  min-width: 40px;
+  height: 40px;
+  gap: 6px;
+  font-size: 20px;
   font-weight: 500;
   color: rgba(255,255,255,.98);
   touch-action: manipulation;
@@ -2030,18 +2030,18 @@ body {
 }
 .media-viewer-actions button:active { transform: scale(.92); opacity: .76; }
 .media-viewer-actions svg {
-  width: 43px;
-  height: 43px;
-  stroke-width: 1.9;
+  width: 32px;
+  height: 32px;
+  stroke-width: 1.8;
   filter: drop-shadow(0 2px 8px rgba(0,0,0,.14));
 }
 .media-viewer-actions button:nth-child(2) svg {
-  width: 39px;
-  height: 39px;
+  width: 30px;
+  height: 30px;
 }
 .media-viewer-actions button:nth-child(3) svg {
-  width: 45px;
-  height: 45px;
+  width: 34px;
+  height: 34px;
 }
 .media-viewer-input {
   min-height: 58px;
@@ -2057,15 +2057,15 @@ body {
   letter-spacing: .2px;
 }
 .media-viewer-input button {
-  width: 38px;
+  width: 36px;
   height: 42px;
   color: rgba(255,255,255,.98);
   transition: transform .16s ease, opacity .16s ease;
 }
 .media-viewer-input button:active { transform: scale(.92); opacity: .76; }
 .media-viewer-input button svg {
-  width: 33px;
-  height: 33px;
+  width: 30px;
+  height: 30px;
   display: block;
   filter: drop-shadow(0 2px 7px rgba(0,0,0,.12));
 }
@@ -2075,6 +2075,308 @@ body {
   .media-viewer-count { font-size: 24px; }
   .media-viewer-author img { width: 52px; height: 52px; flex-basis: 52px; }
   .media-viewer-input input { font-size: 21px; }
-  .media-viewer-input button { width: 35px; }
+  .media-viewer-input button { width: 33px; }
 }
 /* ===== End 0701 Media viewer reference polish ===== */
+
+/* ===== 0701 Detail page content-only post polish ===== */
+.comment-detail-screen .comment-detail-top {
+  height: 72px;
+  flex-basis: 72px;
+  padding: 0 16px 8px;
+  gap: 10px;
+  background: #f6f6f8;
+}
+.comment-detail-screen .comment-detail-top > img {
+  width: 42px;
+  height: 42px;
+  flex-basis: 42px;
+}
+.comment-detail-screen .comment-detail-top b {
+  font-size: 18px;
+  font-weight: 850;
+}
+.comment-detail-screen .comment-detail-top span {
+  font-size: 13px;
+}
+.comment-detail-screen .comment-detail-top .feed-follow {
+  display: grid;
+  margin-left: auto;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+.comment-detail-screen .comment-detail-top .feed-follow.chat-ready {
+  display: inline-flex;
+  flex-basis: 70px;
+  width: 70px;
+  height: 34px;
+  border-radius: 18px;
+}
+.comment-detail-screen .comment-detail-top .feed-more {
+  margin-left: 2px;
+}
+.comment-detail-scroll {
+  background: #f6f6f8;
+}
+.detail-post-card {
+  margin: 0;
+  padding: 22px 14px 18px;
+  border-radius: 20px 20px 0 0;
+  background: #fff;
+  border-bottom: 0;
+}
+.detail-post-card .feed-text {
+  margin: 0 0 14px;
+  color: #27272f;
+  font-size: 17px;
+  line-height: 1.32;
+  font-weight: 560;
+}
+.detail-post-card .feed-photo-button,
+.detail-post-card .feed-gallery-window {
+  width: 100%;
+  margin-left: 0;
+}
+.detail-post-card .feed-photo-button {
+  border-radius: 10px;
+}
+.detail-post-card .feed-photo {
+  border-radius: 10px;
+}
+.detail-post-card .feed-gallery-window {
+  border-radius: 10px;
+}
+.detail-post-card .feed-gallery-item,
+.detail-post-card .feed-gallery-img {
+  border-radius: 10px;
+}
+/* ===== End 0701 Detail page content-only post polish ===== */
+
+/* ===== 0701 Ideal media viewer and profile feed alignment ===== */
+.media-viewer {
+  background:
+    linear-gradient(180deg, rgba(30,30,31,.88) 0%, rgba(162,162,162,.72) 10%, rgba(255,255,255,.96) 20%, rgba(255,255,255,.98) 78%, rgba(120,120,120,.68) 91%, rgba(10,10,12,.94) 100%);
+}
+.media-viewer::before {
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.2) 0%, rgba(255,255,255,0) 18%, rgba(255,255,255,0) 74%, rgba(0,0,0,.34) 100%),
+    radial-gradient(120% 28% at 50% 100%, rgba(0,0,0,.38), rgba(255,255,255,0) 76%);
+}
+.media-viewer .statusbar {
+  height: 82px;
+  flex: 0 0 82px;
+  padding: 39px 37px 0 37px;
+}
+.media-viewer-top {
+  flex: 0 0 86px;
+  grid-template-columns: 64px minmax(0, 1fr) 64px;
+  padding: 0 24px 17px;
+  align-items: center;
+}
+.media-viewer-close {
+  width: 44px;
+  height: 44px;
+}
+.media-viewer-close span {
+  width: 28px;
+  height: 28px;
+}
+.media-viewer-close span::before,
+.media-viewer-close span::after {
+  left: 12px;
+  width: 3px;
+  height: 29px;
+}
+.media-viewer-author {
+  gap: 10px;
+  transform: translateY(-2px);
+}
+.media-viewer-author img {
+  width: 46px;
+  height: 46px;
+  flex-basis: 46px;
+}
+.media-viewer-author b {
+  max-width: 122px;
+  font-size: 22px;
+  font-weight: 690;
+}
+.media-viewer-count {
+  font-size: 22px;
+  font-weight: 420;
+}
+.media-viewer-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+.media-viewer-stage img,
+.media-viewer.image-viewer .media-viewer-stage img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 0;
+  box-shadow: none;
+}
+.media-viewer-bottom {
+  flex: 0 0 138px;
+  padding: 0 18px 26px;
+  gap: 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(156,156,156,.18) 32%, rgba(34,34,36,.54) 100%);
+}
+.media-viewer-actions {
+  min-height: 38px;
+  justify-content: space-between;
+  padding: 0 14px;
+  gap: 0;
+}
+.media-viewer-actions button {
+  min-width: 58px;
+  height: 34px;
+  font-size: 15px;
+  font-weight: 520;
+  gap: 4px;
+}
+.media-viewer-actions svg {
+  width: 27px;
+  height: 27px;
+  stroke-width: 1.9;
+}
+.media-viewer-actions button:nth-child(2) svg {
+  width: 25px;
+  height: 25px;
+}
+.media-viewer-actions button:nth-child(3) svg {
+  width: 29px;
+  height: 29px;
+}
+.media-viewer-input {
+  min-height: 44px;
+  border-radius: 24px;
+  padding: 0 13px 0 20px;
+  gap: 8px;
+  background: rgba(255,255,255,.28);
+}
+.media-viewer-input input {
+  font-size: 18px;
+}
+.media-viewer-input button {
+  width: 29px;
+  height: 34px;
+}
+.media-viewer-input button svg {
+  width: 25px;
+  height: 25px;
+}
+.profile-post-actions.feed-metrics-buttons {
+  height: 36px;
+  margin: 7px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  color: #7c7d86;
+  font-size: 12px;
+  font-weight: 680;
+}
+.profile-post-actions.feed-metrics-buttons button {
+  border: 0;
+  background: transparent;
+  color: #7c7d86;
+  min-width: 38px;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 680;
+}
+.profile-post-actions.feed-metrics-buttons button svg {
+  width: 21px;
+  height: 21px;
+}
+.profile-post-actions.feed-metrics-buttons button:first-child svg {
+  width: 23px;
+  height: 23px;
+}
+.profile-post-actions.feed-metrics-buttons button:nth-child(3) svg {
+  width: 34px;
+  height: 34px;
+}
+.profile-post-media {
+  margin-top: 10px;
+}
+.profile-post-media .profile-post-img {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+  object-position: center;
+}
+.profile-edge-mode .profile-post-img.bouquet,
+.profile-inset-mode .profile-post-img.bouquet {
+  aspect-ratio: 1 / 1;
+  height: auto;
+  max-height: 430px;
+  object-fit: cover;
+}
+.profile-edge-mode .profile-post-img.sea,
+.profile-inset-mode .profile-post-img.sea {
+  aspect-ratio: 3 / 4;
+  height: auto;
+  max-height: 500px;
+  object-fit: cover;
+}
+.profile-edge-mode .profile-post .post-title,
+.profile-edge-mode .profile-post .post-wave,
+.profile-edge-mode .profile-post .profile-post-text,
+.profile-edge-mode .profile-post .profile-post-media,
+.profile-edge-mode .profile-post .profile-post-actions {
+  width: 100%;
+  margin-left: 0;
+}
+.profile-inset-mode .profile-post .post-title,
+.profile-inset-mode .profile-post .post-wave,
+.profile-inset-mode .profile-post .profile-post-text,
+.profile-inset-mode .profile-post .profile-post-media,
+.profile-inset-mode .profile-post .profile-post-actions {
+  width: calc(100% - 47px);
+  margin-left: 47px;
+}
+.profile-detail-scroll .profile-post-actions.feed-metrics-buttons {
+  width: 100%;
+  margin-left: 0;
+}
+@media (max-width: 380px) {
+  .media-viewer .statusbar { padding-left: 33px; padding-right: 31px; }
+  .media-viewer-author b,
+  .media-viewer-count { font-size: 20px; }
+  .media-viewer-author img { width: 42px; height: 42px; flex-basis: 42px; }
+  .media-viewer-input input { font-size: 17px; }
+}
+/* ===== End 0701 Ideal media viewer and profile feed alignment ===== */
+
+/* ===== 0701 Media viewer action order polish ===== */
+.media-viewer-actions button:first-child svg {
+  width: 28px;
+  height: 28px;
+}
+.media-viewer-actions button:nth-child(2) svg {
+  width: 25px;
+  height: 25px;
+}
+.media-viewer-actions button:nth-child(3) svg {
+  width: 30px;
+  height: 30px;
+}
+/* ===== End 0701 Media viewer action order polish ===== */

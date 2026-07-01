@@ -325,24 +325,28 @@ function FeedCard({ post, followed, liked, commentCount, onFollow, onLike, onCom
   }
   return (
     <article className={`feed-card interactive-feed-card${detail ? ' detail-post-card' : ''}`} data-post-id={post.id} onClick={handleCardClick}>
-      <div className="feed-author">
-        <img src={post.avatar} alt={post.name} />
-        <div className="feed-person">
-          <div className="feed-name">{post.name}</div>
-          <div className="feed-time">{post.time}{detail ? ' coldStart' : ''}</div>
+      {!detail && (
+        <div className="feed-author">
+          <img src={post.avatar} alt={post.name} />
+          <div className="feed-person">
+            <div className="feed-name">{post.name}</div>
+            <div className="feed-time">{post.time}</div>
+          </div>
+          <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={stop(onFollow)} aria-label={followed ? 'Chat' : 'Follow'}>
+            {followed ? 'Chat' : <FollowIcon />}
+          </button>
+          <button className="feed-more" onClick={stop(onMore)} aria-label="More">•••</button>
         </div>
-        <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={stop(onFollow)} aria-label={followed ? 'Chat' : 'Follow'}>
-          {followed ? 'Chat' : <FollowIcon />}
-        </button>
-        <button className="feed-more" onClick={stop(onMore)} aria-label="More">•••</button>
-      </div>
+      )}
       <p className="feed-text">{post.text}</p>
       <MediaGallery post={post} onOpenImage={onOpenImage} />
-      <div className="feed-metrics feed-metrics-buttons">
-        <button className={liked ? 'liked' : ''} onClick={stop(onLike)} aria-label={liked ? 'Unlike' : 'Like'}><HeartIcon active={liked} /><span>{post.likes + (liked ? 1 : 0)}</span></button>
-        <button onClick={stop(onComment)} aria-label="Comments"><CommentIcon /><span>{commentCount}</span></button>
-        <button onClick={stop(onShare)} aria-label="Share"><ShareIcon /></button>
-      </div>
+      {!detail && (
+        <div className="feed-metrics feed-metrics-buttons">
+          <button className={liked ? 'liked' : ''} onClick={stop(onLike)} aria-label={liked ? 'Unlike' : 'Like'}><HeartIcon active={liked} /><span>{post.likes + (liked ? 1 : 0)}</span></button>
+          <button onClick={stop(onComment)} aria-label="Comments"><CommentIcon /><span>{commentCount}</span></button>
+          <button onClick={stop(onShare)} aria-label="Share"><ShareIcon /></button>
+        </div>
+      )}
       {!detail && (
         <button className="feed-comment feed-comment-button" onClick={stop(onComment)}>
           <img src={post.commentAvatar} alt={post.commentName} />
@@ -416,6 +420,7 @@ function CommentDetail({ post, comments, draft, setDraft, onBack, followed, like
         <button className="comment-back-hit" aria-label="Back" onClick={onBack}>←</button>
         <img src={post.avatar} alt={post.name} />
         <div><b>{post.name}</b><span>{post.time}</span></div>
+        <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={onFollow} aria-label={followed ? 'Chat' : 'Follow'}>{followed ? 'Chat' : <FollowIcon />}</button>
         <button className="feed-more" onClick={onMore} aria-label="More">•••</button>
       </header>
       <div className="comment-detail-scroll">
