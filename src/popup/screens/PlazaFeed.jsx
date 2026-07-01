@@ -260,7 +260,7 @@ function MediaGallery({ post, onOpenImage }) {
     const ratio = IMAGE_META[photos[0]]?.ratio || 1
     const singleKind = ratio < 0.9 ? 'portrait' : ratio > 1.2 ? 'landscape' : 'square'
     return (
-      <button className={`feed-photo-button single-${singleKind}`} style={{ '--single-ratio': ratio }} onClick={() => onOpenImage(photos[0])} aria-label="View image">
+      <button className={`feed-photo-button single-${singleKind}`} style={{ '--single-ratio': ratio }} onClick={event => { event.stopPropagation(); onOpenImage(photos[0], post, 0) }} aria-label="View image">
         <img className="feed-photo" src={photos[0]} alt="" loading="lazy" />
       </button>
     )
@@ -273,7 +273,7 @@ function MediaGallery({ post, onOpenImage }) {
         {photos.map((photo, index) => {
           const frameRatio = IMAGE_META[photo]?.rawRatio || 1
           return (
-            <button key={`${photo}-${index}`} className="feed-gallery-item" style={{ '--frame-ratio': frameRatio }} onClick={() => onOpenImage(photo)} aria-label={`View image ${index + 1}`}>
+            <button key={`${photo}-${index}`} className="feed-gallery-item" style={{ '--frame-ratio': frameRatio }} onClick={event => { event.stopPropagation(); onOpenImage(photo, post, index) }} aria-label={`View image ${index + 1}`}>
               <img src={photo} alt="" loading="lazy" className="feed-gallery-img" />
             </button>
           )
@@ -283,45 +283,74 @@ function MediaGallery({ post, onOpenImage }) {
   )
 }
 
-function ImageViewer({ src, onClose }) {
-  if (!src) return null
+function ImageViewer({ viewer, onClose, liked = false, commentCount = 0, onLike = () => {}, onShare = () => {}, draft = '', setDraft = () => {}, onSend = () => {} }) {
+  if (!viewer) return null
+  const src = typeof viewer === 'string' ? viewer : viewer.src
+  const post = typeof viewer === 'string' ? null : viewer.post
+  const photos = typeof viewer === 'string' ? [src] : (viewer.photos || [src])
+  const index = typeof viewer === 'string' ? 0 : (viewer.index || 0)
   return (
-    <div className="image-viewer" onClick={onClose} role="dialog" aria-modal="true" aria-label="Image preview">
-      <button className="image-viewer-close" onClick={onClose} aria-label="Close image">×</button>
-      <img src={src} alt="" onClick={event => event.stopPropagation()} />
+    <div className="image-viewer media-viewer" role="dialog" aria-modal="true" aria-label="Image preview">
+      <StatusBar dark time="11:51" battery={34} island />
+      <div className="media-viewer-top">
+        <button className="media-viewer-close" onClick={onClose} aria-label="Close image">×</button>
+        {post && <div className="media-viewer-author"><img src={post.avatar} alt={post.name} /><b>{post.name}</b></div>}
+        <div className="media-viewer-count">{index + 1}/{photos.length}</div>
+      </div>
+      <div className="media-viewer-stage" onClick={onClose}>
+        <img src={src} alt="" onClick={event => event.stopPropagation()} />
+      </div>
+      <div className="media-viewer-bottom">
+        <div className="media-viewer-actions">
+          <button className={liked ? 'liked' : ''} onClick={onLike} aria-label={liked ? 'Unlike' : 'Like'}><HeartIcon /><span>{post ? post.likes + (liked ? 1 : 0) : ''}</span></button>
+          <button type="button" aria-label="Comments"><CommentIcon /><span>{commentCount || 0}</span></button>
+          <button onClick={onShare} aria-label="Share"><ShareIcon /></button>
+        </div>
+        <form className="media-viewer-input" onSubmit={event => { event.preventDefault(); onSend() }}>
+          <input value={draft} onChange={event => setDraft(event.target.value)} placeholder="Write a comment..." />
+          <button type="button" aria-label="Mention">@</button>
+          <button type="button" aria-label="Photo">⌁</button>
+          <button type="button" aria-label="Emoji">☺</button>
+        </form>
+      </div>
     </div>
   )
 }
 
-function FeedCard({ post, followed, liked, commentCount, onFollow, onLike, onComment, onShare, onMore, onOpenImage, detail = false, showPrompt = false }) {
+function FeedCard({ post, followed, liked, commentCount, onFollow, onLike, onComment, onShare, onMore, onOpenImage, onOpenDetail, detail = false, showPrompt = false }) {
+  const stop = handler => event => { event.stopPropagation(); handler?.(event) }
+  const handleCardClick = event => {
+    if (detail || event.target.closest('button, a, input, textarea')) return
+    onOpenDetail?.()
+  }
   return (
-    <article className={`feed-card interactive-feed-card${detail ? ' detail-post-card' : ''}`} data-post-id={post.id}>
+    <article className={`feed-card interactive-feed-card${detail ? ' detail-post-card' : ''}`} data-post-id={post.id} onClick={handleCardClick}>
       <div className="feed-author">
         <img src={post.avatar} alt={post.name} />
         <div className="feed-person">
           <div className="feed-name">{post.name}</div>
           <div className="feed-time">{post.time}{detail ? ' coldStart' : ''}</div>
         </div>
-        <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={onFollow} aria-label={followed ? 'Chat' : 'Follow'}>
+        <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={stop(onFollow)} aria-label={followed ? 'Chat' : 'Follow'}>
           {followed ? 'Chat' : <FollowIcon />}
         </button>
-        <button className="feed-more" onClick={onMore} aria-label="More">•••</button>
+        <button className="feed-more" onClick={stop(onMore)} aria-label="More">•••</button>
       </div>
       <p className="feed-text">{post.text}</p>
       <MediaGallery post={post} onOpenImage={onOpenImage} />
       <div className="feed-metrics feed-metrics-buttons">
-        <button className={liked ? 'liked' : ''} onClick={onLike} aria-label={liked ? 'Unlike' : 'Like'}><HeartIcon active={liked} /><span>{post.likes + (liked ? 1 : 0)}</span></button>
-        <button onClick={onComment} aria-label="Comments"><CommentIcon /><span>{commentCount}</span></button>
-        <button onClick={onShare} aria-label="Share"><ShareIcon /></button>
+        <button className={liked ? 'liked' : ''} onClick={stop(onLike)} aria-label={liked ? 'Unlike' : 'Like'}><HeartIcon active={liked} /><span>{post.likes + (liked ? 1 : 0)}</span></button>
+        <button onClick={stop(onComment)} aria-label="Comments"><CommentIcon /><span>{commentCount}</span></button>
+        <button onClick={stop(onShare)} aria-label="Share"><ShareIcon /></button>
       </div>
       {!detail && (
-        <button className="feed-comment feed-comment-button" onClick={onComment}>
+        <button className="feed-comment feed-comment-button" onClick={stop(onComment)}>
           <img src={post.commentAvatar} alt={post.commentName} />
           <span><b>{post.commentName}</b> {post.comment}</span>
           <span className="feed-comment-like"><HeartIcon small /><span>{post.commentLikes}</span></span>
         </button>
       )}
-      {!detail && showPrompt && <button className="feed-comment-prompt" onClick={onComment}>Just waiting for your comment!</button>}
+      {!detail && showPrompt && <button className="feed-comment-prompt" onClick={stop(onComment)}>Just waiting for your comment!</button>}
     </article>
   )
 }
@@ -387,7 +416,6 @@ function CommentDetail({ post, comments, draft, setDraft, onBack, followed, like
         <button className="comment-back-hit" aria-label="Back" onClick={onBack}>←</button>
         <img src={post.avatar} alt={post.name} />
         <div><b>{post.name}</b><span>{post.time}</span></div>
-        <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={onFollow} aria-label={followed ? 'Chat' : 'Follow'}>{followed ? 'Chat' : <FollowIcon />}</button>
         <button className="feed-more" onClick={onMore} aria-label="More">•••</button>
       </header>
       <div className="comment-detail-scroll">
@@ -471,6 +499,7 @@ export default function PlazaFeed({ nav }) {
   })
   const countComments = post => post.comments + (commentsByPost[post.id]?.length || 0)
   const openDetail = post => { setDetailPost(post); setDraft(''); window.history.pushState({ plazaDetail: post.id }, '', window.location.href) }
+  const openImage = (src, post, index = 0) => setImageViewer({ src, post, index, photos: post?.photos?.length ? post.photos : (post?.photo ? [post.photo] : [src]) })
   const pickSearch = text => { setQuery(text); setQueryOpen(false); setTab('Explore') }
   const changeLayout = next => {
     setLayout(next)
@@ -573,10 +602,10 @@ export default function PlazaFeed({ nav }) {
         onLike={() => toggleSet(setLiked, detailPost.id)}
         onShare={() => { toggleSet(setSaved, detailPost.id); flash('Shared to your vibe board') }}
         onMore={() => { toggleSet(setSaved, detailPost.id); flash(saved.has(detailPost.id) ? 'Removed from saved' : 'Saved this post') }}
-        onOpenImage={setImageViewer}
+        onOpenImage={openImage}
         onSend={sendComment}
       />
-        <ImageViewer src={imageViewer} onClose={() => setImageViewer(null)} />
+        <ImageViewer viewer={imageViewer} onClose={() => setImageViewer(null)} liked={imageViewer?.post ? liked.has(imageViewer.post.id) : false} commentCount={imageViewer?.post ? countComments(imageViewer.post) : 0} onLike={() => imageViewer?.post && toggleSet(setLiked, imageViewer.post.id)} onShare={() => imageViewer?.post && (toggleSet(setSaved, imageViewer.post.id), flash('Shared to your vibe board'))} draft={draft} setDraft={setDraft} onSend={sendComment} />
       </>
     )
   }
@@ -620,7 +649,8 @@ export default function PlazaFeed({ nav }) {
               onComment={() => openDetail(post)}
               onShare={() => { toggleSet(setSaved, post.id); flash('Shared to your vibe board') }}
               onMore={() => { toggleSet(setSaved, post.id); flash(saved.has(post.id) ? 'Removed from saved' : 'Saved this post') }}
-              onOpenImage={setImageViewer}
+              onOpenImage={openImage}
+              onOpenDetail={() => openDetail(post)}
               showPrompt={visiblePromptId === post.id}
             />
           ))}
@@ -629,7 +659,7 @@ export default function PlazaFeed({ nav }) {
       </div>
 
       {queryOpen && <SearchDrawer query={query} setQuery={setQuery} onClose={() => setQueryOpen(false)} onPick={pickSearch} />}
-      <ImageViewer src={imageViewer} onClose={() => setImageViewer(null)} />
+      <ImageViewer viewer={imageViewer} onClose={() => setImageViewer(null)} liked={imageViewer?.post ? liked.has(imageViewer.post.id) : false} commentCount={imageViewer?.post ? countComments(imageViewer.post) : 0} onLike={() => imageViewer?.post && toggleSet(setLiked, imageViewer.post.id)} onShare={() => imageViewer?.post && (toggleSet(setSaved, imageViewer.post.id), flash('Shared to your vibe board'))} draft={draft} setDraft={setDraft} onSend={sendComment} />
       {notice && <div className="plaza-toast">{notice}</div>}
       <button className={`plaza-compose-fab${immersive ? ' show' : ''}`} onClick={() => nav('post')} aria-label="Create post">+</button>
       <div className={`plaza-bottom-shell${immersive ? ' hidden' : ''}`}>

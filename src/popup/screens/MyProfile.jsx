@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import StatusBar from '../StatusBar'
 import BottomNav from '../BottomNav'
 import meAvatar from '../../assets/avatars/me.png'
@@ -5,6 +6,16 @@ import pinnedBouquet from '../../assets/profile/pinned_bouquet_full.jpg'
 import seaPost from '../../assets/profile/sea_post_full.jpg'
 
 const tags = ['♌ Leo', 'Sci-Fi', 'Action', 'Fantasy', 'Superhero', 'Blues', 'Jazz', 'K-Pop', 'Fortnite', 'LoL']
+const profileLayouts = [
+  { key: 'inset', label: '不贴边' },
+  { key: 'edge', label: '贴边' },
+]
+
+const profilePosts = [
+  { id: 'pinned', pinned: true, time: '05-08 16:45', views: 158, title: '<b>#PenggunaBaru</b> flowers', image: pinnedBouquet, imageClass: 'bouquet', comments: 1, likes: 1 },
+  { id: 'sea', time: '06-03 20:26', views: 104, wave: '🌊', image: seaPost, imageClass: 'sea', duration: '00:12', comments: 0, likes: 1 },
+  { id: 'intro', time: '05-08 15:03', views: 0, text: "Hey everyone! I'm a Leo. Just joined PopUp today, super excited!", comments: 0, likes: 0 },
+]
 
 function PhotoIcon() {
   return (
@@ -42,125 +53,117 @@ function EyeIcon() {
   )
 }
 
-function ActionRow({ comments = 0, likes = 0 }) {
+function ProfileLayoutSwitch({ layout, onChange }) {
+  return (
+    <div className="profile-layout-switch plaza-layout-switch" role="group" aria-label="Profile post layout">
+      {profileLayouts.map(item => (
+        <button key={item.key} className={layout === item.key ? 'on' : ''} onClick={() => onChange(item.key)} type="button">{item.label}</button>
+      ))}
+    </div>
+  )
+}
+
+function ActionRow({ comments = 0, likes = 0, onComment, onLike, onShare }) {
+  const stop = handler => event => { event.stopPropagation(); handler?.() }
   return (
     <div className="profile-post-actions">
-      <button type="button" aria-label="Share">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-          <path d="M7.8 13.7 4.8 18c-.5.7.3 1.6 1 1.2l14-7.4c.7-.4.7-1.4 0-1.8l-14-7.4c-.8-.4-1.5.5-1 1.2l3 4.3 6.4 2.8-6.4 2.8Z" stroke="currentColor" strokeWidth="2.3" strokeLinejoin="round" />
-        </svg>
+      <button type="button" aria-label="Share" onClick={stop(onShare)}>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M7.8 13.7 4.8 18c-.5.7.3 1.6 1 1.2l14-7.4c.7-.4.7-1.4 0-1.8l-14-7.4c-.8-.4-1.5.5-1 1.2l3 4.3 6.4 2.8-6.4 2.8Z" stroke="currentColor" strokeWidth="2.3" strokeLinejoin="round" /></svg>
       </button>
-      <button type="button" aria-label={`${comments} comments`}>
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-          <rect x="4" y="5" width="16" height="14" rx="5" stroke="currentColor" strokeWidth="2.4" />
-          <path d="M8.5 10h7M8.5 14h4.5" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-        </svg>
+      <button type="button" aria-label={comments + ' comments'} onClick={stop(onComment)}>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="14" rx="5" stroke="currentColor" strokeWidth="2.4" /><path d="M8.5 10h7M8.5 14h4.5" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" /></svg>
         <span>{comments}</span>
       </button>
-      <button type="button" aria-label={`${likes} likes`}>
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-          <path d="M12 20.3S4.5 15.9 4.5 9.6c0-2.5 1.8-4.3 4.1-4.3 1.5 0 2.8.8 3.4 2 .6-1.2 1.9-2 3.4-2 2.3 0 4.1 1.8 4.1 4.3 0 6.3-7.5 10.7-7.5 10.7Z" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round" />
-        </svg>
+      <button type="button" aria-label={likes + ' likes'} onClick={stop(onLike)}>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 20.3S4.5 15.9 4.5 9.6c0-2.5 1.8-4.3 4.1-4.3 1.5 0 2.8.8 3.4 2 .6-1.2 1.9-2 3.4-2 2.3 0 4.1 1.8 4.1 4.3 0 6.3-7.5 10.7-7.5 10.7Z" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round" /></svg>
         <span>{likes}</span>
       </button>
     </div>
   )
 }
 
-export default function MyProfile({ nav }) {
+function ProfilePost({ post, onOpenDetail, onOpenImage }) {
   return (
-    <div className="screen profile-screen">
+    <article className={'profile-post profile-post-' + post.id} onClick={event => { if (!event.target.closest('button, a, input, textarea')) onOpenDetail(post) }}>
+      <div className="pinned-meta">
+        {post.pinned && <><span className="pin-dot">✦</span><span>Pinned</span></>}
+        <span>{post.time}</span>
+        <span className="post-views"><EyeIcon /> {post.views} Views</span>
+        <span>•••</span>
+      </div>
+      {post.title && <div className="post-title" dangerouslySetInnerHTML={{ __html: post.title }} />}
+      {post.wave && <div className="post-wave">{post.wave}</div>}
+      {post.text && <div className="profile-post-text"><p>{post.text}</p></div>}
+      {post.image && (
+        <button className={'profile-post-media' + (post.duration ? ' profile-video-frame' : '')} type="button" onClick={event => { event.stopPropagation(); onOpenImage(post) }}>
+          <img className={'profile-post-img ' + post.imageClass} src={post.image} alt="" />
+          {post.duration && <span className="video-duration">{post.duration}</span>}
+          {post.duration && <span className="video-sound">⌕</span>}
+        </button>
+      )}
+      <ActionRow comments={post.comments} likes={post.likes} onComment={() => onOpenDetail(post)} onLike={() => {}} onShare={() => {}} />
+    </article>
+  )
+}
+
+function ProfileImageViewer({ viewer, onClose }) {
+  if (!viewer) return null
+  return (
+    <div className="image-viewer media-viewer" role="dialog" aria-modal="true" aria-label="Image preview">
+      <StatusBar dark time="11:51" battery={34} island />
+      <div className="media-viewer-top">
+        <button className="media-viewer-close" onClick={onClose} aria-label="Close image">×</button>
+        <div className="media-viewer-author"><img src={meAvatar} alt="Joxon" /><b>Joxon</b></div>
+        <div className="media-viewer-count">1/1</div>
+      </div>
+      <div className="media-viewer-stage" onClick={onClose}><img src={viewer.image} alt="" onClick={event => event.stopPropagation()} /></div>
+      <div className="media-viewer-bottom">
+        <div className="media-viewer-actions"><button type="button">♡<span>{viewer.likes}</span></button><button type="button">▱<span>{viewer.comments}</span></button><button type="button">↗</button></div>
+        <form className="media-viewer-input" onSubmit={event => event.preventDefault()}><input placeholder="Write a comment..." /><button type="button">@</button><button type="button">⌁</button><button type="button">☺</button></form>
+      </div>
+    </div>
+  )
+}
+
+function ProfileDetail({ post, onClose, onOpenImage }) {
+  if (!post) return null
+  return (
+    <div className="profile-detail-layer" role="dialog" aria-modal="true" aria-label="Post detail">
+      <header className="comment-detail-top profile-detail-top"><button className="comment-back-hit" aria-label="Back" onClick={onClose}>←</button><img src={meAvatar} alt="Joxon" /><div><b>Joxon</b><span>{post.time}</span></div><button className="feed-more" type="button" aria-label="More">•••</button></header>
+      <div className="profile-detail-scroll"><ProfilePost post={post} onOpenDetail={() => {}} onOpenImage={onOpenImage} /></div>
+    </div>
+  )
+}
+
+export default function MyProfile({ nav }) {
+  const [layout, setLayout] = useState(() => new URLSearchParams(window.location.search).get('layout') === 'edge' ? 'edge' : 'inset')
+  const [viewer, setViewer] = useState(null)
+  const [detailPost, setDetailPost] = useState(null)
+  const changeLayout = next => {
+    setLayout(next)
+    const url = new URL(window.location.href)
+    url.searchParams.set('layout', next)
+    window.history.replaceState(window.history.state, '', url)
+  }
+
+  return (
+    <div className={'screen profile-screen profile-' + layout + '-mode'}>
       <div className="profile-scroll">
         <section className="profile-hero profile-hero-live">
           <StatusBar dark time="22:52" timeIcon="focus" battery={24} />
-
-          <div className="profile-topline">
-            <button className="zone-pill" type="button" onClick={() => nav('vibe')} aria-label="Aurora Zone">
-              <span className="zone-orb" />
-              <span>Aurora Zone</span>
-            </button>
-            <div className="profile-top-actions">
-              <button className="gift-btn" type="button" aria-label="Gift"><GiftIcon /></button>
-              <button className="coin-btn" type="button" aria-label="Coins"><span className="coin">P</span><b>0</b></button>
-              <button className="gear-btn" type="button" aria-label="Settings" onClick={() => nav('settings')}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 8.1a3.9 3.9 0 1 1 0 7.8 3.9 3.9 0 0 1 0-7.8Z" stroke="currentColor" strokeWidth="2.1" />
-                  <path d="M20 12a8.3 8.3 0 0 0-.1-1.1l2-1.6-2-3.5-2.4 1a8.8 8.8 0 0 0-1.9-1.1L15.3 3h-4l-.4 2.7A8.8 8.8 0 0 0 9 6.8l-2.4-1-2 3.5 2 1.6A8.3 8.3 0 0 0 6.5 12c0 .4 0 .8.1 1.1l-2 1.6 2 3.5 2.4-1c.6.5 1.2.9 1.9 1.1l.4 2.7h4l.3-2.7c.7-.3 1.4-.6 1.9-1.1l2.4 1 2-3.5-2-1.6c.1-.3.1-.7.1-1.1Z" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <button className="profile-avatar-button" type="button" onClick={() => nav('profile-edit')} aria-label="Edit profile">
-            <img className="profile-avatar" src={meAvatar} alt="Joxon" />
-          </button>
-
-          <div className="profile-name">Joxon</div>
-          <div className="profile-id">ID: 56715146</div>
-          <div className="achievement">✣ Achievement</div>
-          <div className="profile-bio">Laughing with you, not at you.</div>
-
-          <div className="profile-tags">
-            {tags.map((tag, index) => (
-              <span key={tag} className={index === 0 ? 'tag-zodiac' : ''}>{tag}</span>
-            ))}
-            <span className="tag-next">›</span>
-          </div>
-
-          <div className="profile-stats">
-            <span><b>14</b> Following</span>
-            <span><b>4</b> Followers</span>
-            <span className="visitors"><i>+28</i><b>32</b> Visitors</span>
-          </div>
-
+          <div className="profile-topline"><button className="zone-pill" type="button" onClick={() => nav('vibe')} aria-label="Aurora Zone"><span className="zone-orb" /><span>Aurora Zone</span></button><div className="profile-top-actions"><button className="gift-btn" type="button" aria-label="Gift"><GiftIcon /></button><button className="coin-btn" type="button" aria-label="Coins"><span className="coin">P</span><b>0</b></button><button className="gear-btn" type="button" aria-label="Settings" onClick={() => nav('settings')}><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 8.1a3.9 3.9 0 1 1 0 7.8 3.9 3.9 0 0 1 0-7.8Z" stroke="currentColor" strokeWidth="2.1" /><path d="M20 12a8.3 8.3 0 0 0-.1-1.1l2-1.6-2-3.5-2.4 1a8.8 8.8 0 0 0-1.9-1.1L15.3 3h-4l-.4 2.7A8.8 8.8 0 0 0 9 6.8l-2.4-1-2 3.5 2 1.6A8.3 8.3 0 0 0 6.5 12c0 .4 0 .8.1 1.1l-2 1.6 2 3.5 2.4-1c.6.5 1.2.9 1.9 1.1l.4 2.7h4l.3-2.7c.7-.3 1.4-.6 1.9-1.1l2.4 1 2-3.5-2-1.6c.1-.3.1-.7.1-1.1Z" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /></svg></button></div></div>
+          <button className="profile-avatar-button" type="button" onClick={() => nav('profile-edit')} aria-label="Edit profile"><img className="profile-avatar" src={meAvatar} alt="Joxon" /></button>
+          <div className="profile-name">Joxon</div><div className="profile-id">ID: 56715146</div><div className="achievement">✣ Achievement</div><div className="profile-bio">Laughing with you, not at you.</div>
+          <div className="profile-tags">{tags.map((tag, index) => <span key={tag} className={index === 0 ? 'tag-zodiac' : ''}>{tag}</span>)}<span className="tag-next">›</span></div>
+          <div className="profile-stats"><span><b>14</b> Following</span><span><b>4</b> Followers</span><span className="visitors"><i>+28</i><b>32</b> Visitors</span></div>
           <button className="en-route" type="button" onClick={() => nav('universe')}>🪐 En Route ›</button>
         </section>
-
-        <div className="profile-compose">
-          <div className="compose-date">Today</div>
-          <div className="compose-prompt">Share a thought or moment</div>
-          <div className="photo-drop"><PhotoIcon /> Photo</div>
-        </div>
-
-        <article className="profile-post profile-post-pinned">
-          <div className="pinned-meta">
-            <span className="pin-dot">✦</span>
-            <span>Pinned</span>
-            <span>05-08 16:45</span>
-            <span className="post-views"><EyeIcon /> 158 Views</span>
-            <span>•••</span>
-          </div>
-          <div className="post-title"><b>#PenggunaBaru</b> flowers</div>
-          <img className="profile-post-img bouquet" src={pinnedBouquet} alt="" />
-          <ActionRow comments={1} likes={1} />
-        </article>
-
-        <article className="profile-post profile-post-video">
-          <div className="pinned-meta">
-            <span>06-03 20:26</span>
-            <span className="post-views"><EyeIcon /> 104 Views</span>
-            <span>•••</span>
-          </div>
-          <div className="post-wave">🌊</div>
-          <div className="profile-video-frame">
-            <img className="profile-post-img sea" src={seaPost} alt="" />
-            <span className="video-duration">00:12</span>
-            <span className="video-sound">⌕</span>
-          </div>
-          <ActionRow comments={0} likes={1} />
-        </article>
-
-        <article className="profile-post profile-post-text">
-          <div className="pinned-meta">
-            <span>05-08 15:03</span>
-            <span className="post-views"><EyeIcon /> 0 Views</span>
-            <span>•••</span>
-          </div>
-          <p>Hey everyone! I'm a Leo. Just joined PopUp today, super excited!</p>
-          <ActionRow comments={0} likes={0} />
-        </article>
+        <div className="profile-compose"><div className="compose-date">Today</div><div className="compose-prompt">Share a thought or moment</div><div className="photo-drop"><PhotoIcon /> Photo</div></div>
+        <ProfileLayoutSwitch layout={layout} onChange={changeLayout} />
+        {profilePosts.map(post => <ProfilePost key={post.id} post={post} onOpenDetail={setDetailPost} onOpenImage={setViewer} />)}
       </div>
-
+      <ProfileImageViewer viewer={viewer} onClose={() => setViewer(null)} />
+      <ProfileDetail post={detailPost} onClose={() => setDetailPost(null)} onOpenImage={setViewer} />
       <BottomNav active="me" nav={nav} />
     </div>
   )
