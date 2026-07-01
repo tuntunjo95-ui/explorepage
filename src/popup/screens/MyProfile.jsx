@@ -110,16 +110,16 @@ function ProfileImageViewer({ viewer, onClose }) {
   if (!viewer) return null
   return (
     <div className="image-viewer media-viewer" role="dialog" aria-modal="true" aria-label="Image preview">
-      <StatusBar dark time="11:51" battery={34} island />
+      <StatusBar dark time="11:51" battery={34} />
       <div className="media-viewer-top">
-        <button className="media-viewer-close" onClick={onClose} aria-label="Close image">×</button>
+        <button className="media-viewer-close" onClick={onClose} aria-label="Close image"><span aria-hidden="true" /></button>
         <div className="media-viewer-author"><img src={meAvatar} alt="Joxon" /><b>Joxon</b></div>
         <div className="media-viewer-count">1/1</div>
       </div>
-      <div className="media-viewer-stage" onClick={onClose}><img src={viewer.image} alt="" onClick={event => event.stopPropagation()} /></div>
+      <div className="media-viewer-stage" onClick={onClose}><img src={viewer.image} alt="" onClick={onClose} /></div>
       <div className="media-viewer-bottom">
-        <div className="media-viewer-actions"><button type="button">♡<span>{viewer.likes}</span></button><button type="button">▱<span>{viewer.comments}</span></button><button type="button">↗</button></div>
-        <form className="media-viewer-input" onSubmit={event => event.preventDefault()}><input placeholder="Write a comment..." /><button type="button">@</button><button type="button">⌁</button><button type="button">☺</button></form>
+        <div className="media-viewer-actions"><button type="button" aria-label="Like"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 5.9c-1.7-1.9-4.5-1.8-6.1 0L12 8.2 9.8 5.9c-1.6-1.8-4.4-1.9-6.1 0-1.8 2-1.5 5 .4 6.9l7.1 6.8c.5.4 1.1.4 1.6 0l7.1-6.8c1.9-1.9 2.2-4.9.4-6.9Z" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round"/></svg><span>{viewer.likes}</span></button><button type="button" aria-label="Comments"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" strokeWidth="2.05"/><path d="M8.3 10.2h7.4M8.3 13.8h4.5" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round"/></svg><span>{viewer.comments}</span></button><button type="button" aria-label="Share"><svg viewBox="0 0 34 34" aria-hidden="true"><path d="M13.2 9.4 24.2 17 13.2 24.6v-5.3h-1.05c-4.25 0-7.25 1.6-9.15 4.85.45-7.3 4.15-11.35 10.2-11.35V9.4Z" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round"/></svg></button></div>
+        <form className="media-viewer-input" onSubmit={event => event.preventDefault()}><input placeholder="Write a comment..." /><button type="button" aria-label="Mention"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" strokeWidth="2.05"/><path d="M15.6 15.1c-.85.75-2.05 1.15-3.25.95-2.05-.35-3.45-2.25-3.1-4.25.32-1.95 2.18-3.25 4.05-2.92 1.75.3 2.95 1.9 2.65 3.58l-.35 2.02c-.18 1.05.45 1.75 1.38 1.58 1.55-.28 2.9-2.05 2.9-4.4 0-4.1-3.02-7.22-7.4-7.22-4.72 0-8.22 3.58-8.22 8.35 0 4.88 3.42 8.22 8.22 8.22 1.35 0 2.6-.25 3.78-.78" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round"/></svg></button><button type="button" aria-label="Photo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="4" fill="none" stroke="currentColor" strokeWidth="2.05"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><path d="m5.8 17 4.4-4.4 3.3 3.35 2.3-2.45 2.7 3.5" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round"/></svg></button><button type="button" aria-label="Emoji"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" strokeWidth="2.05"/><path d="M8.7 14.1c.82 1.18 1.9 1.75 3.3 1.75s2.48-.57 3.3-1.75" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round"/><circle cx="9" cy="10" r="1.1" fill="currentColor"/><circle cx="15" cy="10" r="1.1" fill="currentColor"/></svg></button></form>
       </div>
     </div>
   )

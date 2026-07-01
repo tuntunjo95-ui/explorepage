@@ -291,14 +291,14 @@ function ImageViewer({ viewer, onClose, liked = false, commentCount = 0, onLike 
   const index = typeof viewer === 'string' ? 0 : (viewer.index || 0)
   return (
     <div className="image-viewer media-viewer" role="dialog" aria-modal="true" aria-label="Image preview">
-      <StatusBar dark time="11:51" battery={34} island />
+      <StatusBar dark time="11:51" battery={34} />
       <div className="media-viewer-top">
-        <button className="media-viewer-close" onClick={onClose} aria-label="Close image">×</button>
+        <button className="media-viewer-close" onClick={onClose} aria-label="Close image"><span aria-hidden="true" /></button>
         {post && <div className="media-viewer-author"><img src={post.avatar} alt={post.name} /><b>{post.name}</b></div>}
         <div className="media-viewer-count">{index + 1}/{photos.length}</div>
       </div>
       <div className="media-viewer-stage" onClick={onClose}>
-        <img src={src} alt="" onClick={event => event.stopPropagation()} />
+        <img src={src} alt="" onClick={onClose} />
       </div>
       <div className="media-viewer-bottom">
         <div className="media-viewer-actions">
@@ -308,9 +308,9 @@ function ImageViewer({ viewer, onClose, liked = false, commentCount = 0, onLike 
         </div>
         <form className="media-viewer-input" onSubmit={event => { event.preventDefault(); onSend() }}>
           <input value={draft} onChange={event => setDraft(event.target.value)} placeholder="Write a comment..." />
-          <button type="button" aria-label="Mention">@</button>
-          <button type="button" aria-label="Photo">⌁</button>
-          <button type="button" aria-label="Emoji">☺</button>
+          <button type="button" aria-label="Mention"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" strokeWidth="2.05"/><path d="M15.6 15.1c-.85.75-2.05 1.15-3.25.95-2.05-.35-3.45-2.25-3.1-4.25.32-1.95 2.18-3.25 4.05-2.92 1.75.3 2.95 1.9 2.65 3.58l-.35 2.02c-.18 1.05.45 1.75 1.38 1.58 1.55-.28 2.9-2.05 2.9-4.4 0-4.1-3.02-7.22-7.4-7.22-4.72 0-8.22 3.58-8.22 8.35 0 4.88 3.42 8.22 8.22 8.22 1.35 0 2.6-.25 3.78-.78" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
+          <button type="button" aria-label="Photo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="4" fill="none" stroke="currentColor" strokeWidth="2.05"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><path d="m5.8 17 4.4-4.4 3.3 3.35 2.3-2.45 2.7 3.5" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
+          <button type="button" aria-label="Emoji"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" strokeWidth="2.05"/><path d="M8.7 14.1c.82 1.18 1.9 1.75 3.3 1.75s2.48-.57 3.3-1.75" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round"/><circle cx="9" cy="10" r="1.1" fill="currentColor"/><circle cx="15" cy="10" r="1.1" fill="currentColor"/></svg></button>
         </form>
       </div>
     </div>
