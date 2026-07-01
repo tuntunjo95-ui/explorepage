@@ -1,0 +1,46 @@
+<!-- @dsCard group="Forms & Controls" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Forms & Controls</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body{background:#fff!important;display:block!important;height:auto!important;margin:0;padding:18px;font-family:-apple-system,sans-serif}
+  .dslabel{font:700 11px/1 -apple-system;letter-spacing:.05em;text-transform:uppercase;color:#9a9aa6;margin:16px 0 8px}
+  .dsf{width:402px;max-width:100%;margin:0 auto;background:#fff;border:1px solid #ececf0;border-radius:14px;overflow:hidden;padding:14px 16px}
+  .rowlbl{display:flex;align-items:center;gap:14px;margin:8px 0;font-weight:600}
+  .pillrow{display:flex;gap:8px;flex-wrap:wrap}
+</style></head><body>
+  <div class="dslabel">Toggle 开关（on / off）</div>
+  <div class="dsf">
+    <div class="rowlbl"><div class="tgl on"><div class="tgl-dot"></div></div> On</div>
+    <div class="rowlbl"><div class="tgl"><div class="tgl-dot"></div></div> Off</div>
+  </div>
+
+  <div class="dslabel">举报类型单选行（✓）</div>
+  <div class="dsf rp-types" style="padding:0">
+    <div class="rp-type"><span>Vulgar or Porn</span><span class="rp-check on">✓</span></div>
+    <div class="rp-type"><span>Insult</span><span class="rp-check">✓</span></div>
+    <div class="rp-type"><span>Fraud</span><span class="rp-check">✓</span></div>
+  </div>
+
+  <div class="dslabel">资料编辑行 / 设置行</div>
+  <div class="dsf" style="padding:0">
+    <ul class="edit-list" style="margin:0">
+      <li class="er tap"><div class="er-l">Nickname<small>Change once within 7 days</small></div><div class="er-r">Joxon<span class="er-chev">›</span></div></li>
+      <li class="er"><div class="er-l">Gender<small>Cannot be changed after registration</small></div><div class="er-r muted">Male</div></li>
+    </ul>
+    <div class="settings-row"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#303037" stroke-width="1.9"><path d="M5 6h14v12H5z M7 9h4 M7 13h8"/></svg><span>Account</span><i>›</i></div>
+  </div>
+
+  <div class="dslabel">吸引力卡</div>
+  <div class="dsf attract-card">
+    <div class="attract-top"><span class="attract-face">🧑</span><b>High Attractiveness</b><span class="attract-q">?</span></div>
+    <div class="attract-bar"><div class="attract-fill"><span>95%</span></div></div>
+    <div class="attract-hint">📍 Complete profile to get more chat chances. <a>Check Guide&gt;&gt;</a></div>
+  </div>
+
+  <div class="dslabel">Pills / Tabs</div>
+  <div class="dsf">
+    <div class="pillrow plaza-pills"><span class="plaza-pill on">Explore</span><span class="plaza-pill">Social</span><span class="plaza-pill">Anonymous</span><span class="plaza-pill">Latest</span></div>
+    <div class="question-tabs" style="margin-top:10px"><button class="on">Hai</button><button>Tentangmu</button><button>Biarkan mereka menjawab</button></div>
+  </div>
+</body></html>

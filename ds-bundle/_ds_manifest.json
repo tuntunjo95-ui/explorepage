@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "cards": [
+    { "path": "components/foundations.html", "name": "Colors & Type", "group": "Foundations", "subtitle": "品牌色 / CATS 兴趣色 / 深色面 + 字体", "viewport": { "width": 440, "height": 760 } },
+    { "path": "components/chrome.html", "name": "Status Bar & Bottom Nav", "group": "App Chrome", "subtitle": "状态栏(亮/暗) + 底部导航", "viewport": { "width": 440, "height": 520 } },
+    { "path": "components/message-list.html", "name": "Conversation Rows & Banner", "group": "Message List", "subtitle": "会话行 / 命运标 / 兴趣胶囊 / 左滑删除", "viewport": { "width": 440, "height": 1000 } },
+    { "path": "components/star-light.html", "name": "Star Light & Recall Card", "group": "Message List", "subtitle": "深度好友行 + 召回卡", "viewport": { "width": 440, "height": 440 } },
+    { "path": "components/chat.html", "name": "Bubbles, Input & Tools", "group": "Chat", "subtitle": "气泡 / 双模式输入栏 / 6 工具", "viewport": { "width": 440, "height": 1180 } },
+    { "path": "components/chat-overlays.html", "name": "Panels & Dialogs", "group": "Chat", "subtitle": "礼物/表情/贴纸面板 + Q&A/通话/删除弹层", "viewport": { "width": 540, "height": 640 } },
+    { "path": "components/match.html", "name": "Match Cards & User Card", "group": "Match", "subtitle": "三匹配卡 + 用户卡 + 换一批", "viewport": { "width": 440, "height": 640 } },
+    { "path": "components/profile.html", "name": "Hero, Tags & Posts", "group": "Profile", "subtitle": "Aurora Zone Hero + 帖子卡", "viewport": { "width": 440, "height": 900 } },
+    { "path": "components/vibe.html", "name": "Aurora Zone Cards", "group": "Vibe Test", "subtitle": "信条 / 光球 / 气泡 / Same Vibe", "viewport": { "width": 440, "height": 920 } },
+    { "path": "components/universe.html", "name": "Planets, Capsule & Day", "group": "Universe", "subtitle": "四星球 + 头像舱 + Day 进度", "viewport": { "width": 440, "height": 540 } },
+    { "path": "components/forms.html", "name": "Toggle, Rows, Pills", "group": "Forms & Controls", "subtitle": "开关 / 单选 / 编辑行 / 吸引力卡 / Pills", "viewport": { "width": 440, "height": 860 } },
+    { "path": "components/plaza.html", "name": "Feed Card", "group": "Plaza", "subtitle": "顶栏 Tabs + Feed 卡", "viewport": { "width": 440, "height": 720 } }
+  ]
+}

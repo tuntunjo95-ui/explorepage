@@ -1,0 +1,54 @@
+<!-- @dsCard group="Chat" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Chat</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body{background:#fff!important;display:block!important;height:auto!important;margin:0;padding:18px;font-family:-apple-system,sans-serif}
+  .dslabel{font:700 11px/1 -apple-system;letter-spacing:.05em;text-transform:uppercase;color:#9a9aa6;margin:14px 0 8px}
+  .dsf{width:402px;max-width:100%;margin:0 auto;background:#F4F5FB;border:1px solid #ececf0;border-radius:14px;overflow:hidden}
+  .chat-input{position:static}
+</style></head><body>
+  <div class="dslabel">Header</div>
+  <div class="dsf" style="background:#fff"><header class="chat-header" style="position:static">
+    <div class="ch-back"><svg width="13" height="22" viewBox="0 0 13 22" fill="none" stroke="#15151c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2 2 11l9 9"/></svg></div>
+    <span class="ch-badge">1</span>
+    <img class="ch-av" src="../assets/avatars/hhhhll.png" alt="">
+    <span class="ch-name">Hhhhll</span>
+    <svg class="ch-rel" width="22" height="18" viewBox="0 0 24 20" fill="#6457E5"><circle cx="8" cy="6" r="4"/><path d="M1 18c0-3.5 3-6 7-6s7 2.5 7 6z"/><path d="M17 8h6M17 12h6M20 5l3 3-3 3M20 9l-3 3 3 3" stroke="#6457E5" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="ch-spacer"></div>
+    <svg class="ch-satellite" width="28" height="24" viewBox="0 0 34 28"><defs><linearGradient id="sg" x1="8" x2="24" y1="7" y2="23" gradientUnits="userSpaceOnUse"><stop stop-color="#efeff4"/><stop offset="1" stop-color="#b9bac3"/></linearGradient></defs><ellipse cx="17" cy="15" rx="15" ry="4.1" fill="none" stroke="#c8c8cf" stroke-width="2.4" transform="rotate(-19 17 15)"/><circle cx="17" cy="15" r="7.2" fill="url(#sg)"/><path d="M9.5 17.4c5.2 1.2 10.6.3 16.1-2.5" stroke="#a9aab4" stroke-width="2.1" stroke-linecap="round"/></svg>
+    <div class="ch-more"><svg width="22" height="6" viewBox="0 0 22 6" fill="#15151c"><circle cx="3" cy="3" r="2.4"/><circle cx="11" cy="3" r="2.4"/><circle cx="19" cy="3" r="2.4"/></svg></div>
+  </header></div>
+
+  <div class="dslabel">Message bubbles（全部右对齐 out）</div>
+  <div class="dsf" style="padding:14px 12px">
+    <div class="msg-row out"><div class="msg-body"><div class="bubble-post"><span class="bp-round">🪐2</span><img class="bp-img" src="../assets/flowers_post.png" alt=""><div class="bp-foot"><img class="bp-av" src="../assets/avatars/me_nav.png" alt=""><span class="bp-name">Joxon</span></div><div class="bp-tag">#PenggunaBaru flowers</div></div></div><img class="msg-av" src="../assets/avatars/me_nav.png" alt=""></div>
+    <div class="msg-row out"><div class="msg-body"><div class="bubble-exchange"><div class="exch-q">Masa kecil kamu seperti apa?</div><div class="exch-btn">🔒 Exchange answer</div></div></div><img class="msg-av" src="../assets/avatars/me_nav.png" alt=""></div>
+    <div class="msg-time">00:02</div>
+    <div class="msg-row out"><div class="msg-body"><img class="msg-sticker" src="../assets/star_sticker.png" alt=""></div><img class="msg-av" src="../assets/avatars/me_nav.png" alt=""></div>
+    <div class="msg-row out"><div class="msg-body"><div class="bubble-text">😀 Morning!</div></div><img class="msg-av" src="../assets/avatars/me_nav.png" alt=""></div>
+  </div>
+
+  <div class="dslabel">Input bar · 文字模式 + 工具行</div>
+  <div class="dsf" style="background:#fff"><div class="chat-input">
+    <div class="ci-bar">
+      <svg class="ci-mic" width="22" height="22" viewBox="0 0 24 24" fill="#8a8a96"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3" stroke="#8a8a96" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+      <input class="ci-input" placeholder="Say something" readonly>
+      <span class="ci-emoji">🙂</span>
+    </div>
+    <div class="ci-tools">
+      <button class="ci-tool"><img src="../assets/chat_icons/ic_ai.png" alt=""></button>
+      <button class="ci-tool"><img src="../assets/chat_icons/ic_camera.png" alt=""></button>
+      <button class="ci-tool"><img src="../assets/chat_icons/ic_photo.png" alt=""></button>
+      <button class="ci-tool"><img src="../assets/chat_icons/ic_question.png" alt=""></button>
+      <button class="ci-tool"><img src="../assets/chat_icons/ic_gift.png" alt=""></button>
+      <button class="ci-tool"><img src="../assets/chat_icons/ic_phone.png" alt=""></button>
+    </div>
+  </div></div>
+
+  <div class="dslabel">Input bar · 语音模式（Press to talk）</div>
+  <div class="dsf" style="background:#fff"><div class="chat-input"><div class="ci-bar">
+    <span class="ci-kbd">⌨</span>
+    <button class="ci-ptt">Press to talk</button>
+  </div></div></div>
+</body></html>

@@ -1,0 +1,78 @@
+<!-- @dsCard group="Message List" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Conversation Rows</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body{background:#fff!important;display:block!important;height:auto!important;margin:0;padding:18px;font-family:-apple-system,sans-serif}
+  .dslabel{font:700 11px/1 -apple-system;letter-spacing:.05em;text-transform:uppercase;color:#9a9aa6;margin:14px 0 8px}
+  .dsf{width:402px;max-width:100%;margin:0 auto;background:#fff;border:1px solid #ececf0;border-radius:14px;overflow:hidden}
+  .conv-list{margin:0}
+</style></head><body>
+  <div class="dslabel">Tired-of-Hi banner</div>
+  <div class="dsf" style="padding:8px 0">
+    <div class="cqa-banner">
+      <span class="cqa-ic">💬</span>
+      <span class="cqa-text">Tired of "Hi"? <b>Set your chat question now.</b></span>
+      <div class="cqa-arrow">→</div>
+      <button class="cqa-close">✕</button>
+    </div>
+  </div>
+
+  <div class="dslabel">Conversation rows (variants)</div>
+  <div class="dsf">
+    <ul class="conv-list">
+      <!-- 命运标 + 在线 + 未读 -->
+      <li class="conv-wrap"><div class="conv">
+        <div class="conv-av-wrap"><img class="conv-av" src="../assets/avatars/hhhhll.png" alt=""><span class="av-dot"></span></div>
+        <div class="conv-mid">
+          <div class="conv-name">Hhhhll<span class="nmark fate">🪽2</span></div>
+          <div class="conv-prev"><span class="greet">wait you actually did that?? 😂</span></div>
+        </div>
+        <div class="conv-right"><div class="conv-time">2m</div><div class="conv-badge">2</div></div>
+      </div></li>
+      <!-- 同频信号 ✦ 兴趣标签 -->
+      <li class="conv-wrap"><div class="conv has-tag">
+        <div class="conv-av-wrap"><img class="conv-av" src="../assets/avatars/aponmooo.png" alt=""><span class="av-dot"></span></div>
+        <div class="conv-mid">
+          <div class="conv-name">aponmooo</div>
+          <div class="conv-prev"><span class="tag-a"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.55 6.2 5.25 10.9 12 12-6.75 1.1-11.45 5.8-12 12-.55-6.2-5.25-10.9-12-12C6.75 10.9 11.45 6.2 12 0Z"/></svg> Gaming</span> <span class="greet">hy</span></div>
+        </div>
+        <div class="conv-right"><div class="conv-time">06-09</div><div class="conv-badge">1</div></div>
+      </div></li>
+      <!-- 斜体名 + 数据徽标 -->
+      <li class="conv-wrap"><div class="conv">
+        <div class="conv-av-wrap"><img class="conv-av" src="../assets/avatars/calista.png" alt="">
+          <span class="av-stats"><svg width="11" height="11" viewBox="0 0 24 24" fill="#fff"><rect x="4" y="13" width="4" height="7" rx="1"/><rect x="10" y="8" width="4" height="12" rx="1"/><rect x="16" y="4" width="4" height="16" rx="1"/></svg></span>
+        </div>
+        <div class="conv-mid">
+          <div class="conv-name italic">calista</div>
+          <div class="conv-prev"><span class="greet">haha omg then what happened 😭</span></div>
+        </div>
+        <div class="conv-right"><div class="conv-time">18m</div><div class="conv-badge">1</div></div>
+      </div></li>
+    </ul>
+  </div>
+
+  <div class="dslabel">Left-swipe → Delete</div>
+  <div class="dsf">
+    <ul class="conv-list">
+      <li class="conv-wrap">
+        <div class="conv-del">Delete</div>
+        <div class="conv" style="transform:translateX(-80px)">
+          <div class="conv-av-wrap"><img class="conv-av" src="../assets/avatars/raya.png" alt=""></div>
+          <div class="conv-mid"><div class="conv-name">RAYA<span class="nmark">🪶</span></div><div class="conv-prev"><span class="greet">p</span></div></div>
+          <div class="conv-right"><div class="conv-time">05-11</div></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="dslabel">Name marks</div>
+  <div class="dsf" style="padding:12px 18px;display:flex;gap:18px;flex-wrap:wrap;font-weight:800">
+    <span>fate <span class="nmark fate">🪽2</span></span>
+    <span>gem <span class="nmark gem">💎</span></span>
+    <span>feather <span class="nmark">🪶</span></span>
+    <span>friends <span class="nmark">👥</span></span>
+    <span>star <span class="nmark">☆</span></span>
+  </div>
+</body></html>

@@ -1,0 +1,44 @@
+<!-- @dsCard group="Chat" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Chat Panels & Dialogs</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body{background:#fff!important;display:block!important;height:auto!important;margin:0;padding:18px;font-family:-apple-system,sans-serif}
+  .dslabel{font:700 11px/1 -apple-system;letter-spacing:.05em;text-transform:uppercase;color:#9a9aa6;margin:14px 0 8px}
+  .panels{display:flex;gap:12px;flex-wrap:wrap}
+  .panels img{width:230px;max-width:100%;border-radius:14px 14px 0 0;border:1px solid #ececf0;display:block}
+  .tint{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;background:#cdc9e6;padding:22px;border-radius:14px}
+  .qa-overlay,.confirm-overlay{position:static!important;background:transparent!important;display:block!important}
+</style></head><body>
+  <div class="dslabel">底部面板（礼物 / 表情 / 贴纸 · 整图素材）</div>
+  <div class="panels">
+    <img src="../assets/panels/gift_panel.png" alt="gift">
+    <img src="../assets/panels/emoji_panel.png" alt="emoji">
+    <img src="../assets/panels/sticker_panel.png" alt="sticker">
+  </div>
+
+  <div class="dslabel">弹层（Q&A 破冰 / 语音通话 / 删除确认）</div>
+  <div class="tint">
+    <div class="qa-sheet">
+      <div class="qa-title">Q&amp;A</div>
+      <div class="qa-card">
+        <img class="qa-av" src="../assets/avatars/me_nav.png" alt="">
+        <div class="qa-name">Joxon</div>
+        <div class="qa-q">Hal terseram apa yang pernah kamu alamin?</div>
+        <button class="qa-change">↻ change</button>
+        <div class="qa-answer">Answer questions and exchange answers</div>
+      </div>
+      <button class="qa-confirm">✓ Confirm</button>
+    </div>
+    <div class="call-box">
+      <div class="call-title">Voice Call</div>
+      <div class="call-msg">Confirm to send a voice call?</div>
+      <button class="call-confirm">Confirm</button>
+      <button class="call-cancel">Cancel</button>
+    </div>
+    <div class="confirm-box">
+      <div class="confirm-msg">确认删除与 Hhhhll 的对话?</div>
+      <div class="confirm-btns"><button class="cf-cancel">Cancel</button><button class="cf-del">Delete</button></div>
+    </div>
+  </div>
+</body></html>
