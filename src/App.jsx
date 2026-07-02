@@ -17,6 +17,7 @@ import SocialTools from './popup/screens/SocialTools'
 import ChatQuestion from './popup/screens/ChatQuestion'
 import StarLightScreen from './popup/screens/StarLightScreen'
 import Showcase from './popup/screens/Showcase'
+import PostComposer from './popup/screens/PostComposer'
 import BottomNav from './popup/BottomNav'
 import StatusBar from './popup/StatusBar'
 
@@ -63,7 +64,7 @@ export default function App() {
     case 'social-tools': view = <SocialTools nav={nav} from={param} />; break
     case 'chat-question': view = <ChatQuestion nav={nav} from={param} />; break
     case 'starlight': view = <StarLightScreen nav={nav} />; break
-    case 'post': view = <Stub title="发帖" nav={nav} active="message" />; break
+    case 'post': view = <PostComposer nav={nav} />; break
     default: view = <MessageList nav={nav} scheme={scheme} setScheme={setScheme} />
   }
 

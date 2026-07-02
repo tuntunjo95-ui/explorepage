@@ -64,6 +64,16 @@ function ShareIcon() {
   )
 }
 
+function ChatBubbleIcon() {
+  return (
+    <svg className="feed-chat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5.4 17.4c-1.35-1.28-2.1-3.02-2.1-4.92 0-4.06 3.6-7.18 8.48-7.18 4.92 0 8.5 3.12 8.5 7.18 0 4.08-3.58 7.18-8.5 7.18-1.02 0-1.98-.13-2.86-.4l-3.28 1.54c-.54.25-1.08-.25-.88-.8l.64-2.6Z" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.7 12.25h6.6M8.7 15.05h4.05" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" />
+      <circle cx="17.35" cy="7.25" r="2.35" fill="currentColor" />
+    </svg>
+  )
+}
+
 function FollowIcon({ active = false }) {
   if (active) {
     return (
@@ -260,20 +270,21 @@ function MediaGallery({ post, onOpenImage }) {
     const ratio = IMAGE_META[photos[0]]?.ratio || 1
     const singleKind = ratio < 0.9 ? 'portrait' : ratio > 1.2 ? 'landscape' : 'square'
     return (
-      <button className={`feed-photo-button single-${singleKind}`} style={{ '--single-ratio': ratio }} onClick={event => { event.stopPropagation(); onOpenImage(photos[0], post, 0) }} aria-label="View image">
+      <button className={`feed-photo-button single-${singleKind}`} style={{ '--media-ratio': ratio }} onClick={event => { event.stopPropagation(); onOpenImage(photos[0], post, 0) }} aria-label="View image">
         <img className="feed-photo" src={photos[0]} alt="" loading="lazy" />
       </button>
     )
   }
   const firstRatio = IMAGE_META[photos[0]]?.ratio || 1
-  const firstFrameRatio = IMAGE_META[photos[0]]?.rawRatio || firstRatio
   return (
-    <div className="feed-gallery-window" style={{ '--first-ratio': firstRatio, '--first-frame-ratio': firstFrameRatio }}>
+    <div className={`feed-gallery-window first-${firstRatio >= 1 ? 'landscape' : 'portrait'}`} style={{ '--media-ratio': firstRatio }}>
       <div className={`feed-gallery gallery-${post.galleryKind || 'mixed'}`} aria-label={`${post.name} photos`}>
         {photos.map((photo, index) => {
-          const frameRatio = IMAGE_META[photo]?.rawRatio || 1
+          const rawRatio = IMAGE_META[photo]?.rawRatio || 1
+          const displayRatio = Math.min(4 / 3, Math.max(3 / 4, rawRatio))
+          const needsCrop = displayRatio !== rawRatio
           return (
-            <button key={`${photo}-${index}`} className="feed-gallery-item" style={{ '--frame-ratio': frameRatio }} onClick={event => { event.stopPropagation(); onOpenImage(photo, post, index) }} aria-label={`View image ${index + 1}`}>
+            <button key={`${photo}-${index}`} className={`feed-gallery-item ${needsCrop ? 'needs-crop' : 'no-crop'}`} style={{ '--display-ratio': displayRatio }} onClick={event => { event.stopPropagation(); onOpenImage(photo, post, index) }} aria-label={`View image ${index + 1}`}>
               <img src={photo} alt="" loading="lazy" className="feed-gallery-img" />
             </button>
           )
@@ -333,7 +344,7 @@ function FeedCard({ post, followed, liked, commentCount, onFollow, onLike, onCom
             <div className="feed-time">{post.time}</div>
           </div>
           <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={stop(onFollow)} aria-label={followed ? 'Chat' : 'Follow'}>
-            {followed ? 'Chat' : <FollowIcon />}
+            {followed ? <ChatBubbleIcon /> : <FollowIcon />}
           </button>
           <button className="feed-more" onClick={stop(onMore)} aria-label="More">•••</button>
         </div>
@@ -420,7 +431,7 @@ function CommentDetail({ post, comments, draft, setDraft, onBack, followed, like
         <button className="comment-back-hit" aria-label="Back" onClick={onBack}>←</button>
         <img src={post.avatar} alt={post.name} />
         <div><b>{post.name}</b><span>{post.time}</span></div>
-        <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={onFollow} aria-label={followed ? 'Chat' : 'Follow'}>{followed ? 'Chat' : <FollowIcon />}</button>
+        <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={onFollow} aria-label={followed ? 'Chat' : 'Follow'}>{followed ? <ChatBubbleIcon /> : <FollowIcon />}</button>
         <button className="feed-more" onClick={onMore} aria-label="More">•••</button>
       </header>
       <div className="comment-detail-scroll">
