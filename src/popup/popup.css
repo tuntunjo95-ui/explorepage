@@ -3038,3 +3038,26 @@ body {
   .post-composer-text { font-size: 15.8px; }
 }
 /* ===== End 0702 Post composer match feed type scale ===== */
+
+
+/* ===== 0702 Multi image swipe hit area full width ===== */
+.plaza-inset-mode .feed-gallery-window:not(.detail-post-card .feed-gallery-window) {
+  width: var(--feed-content-width);
+  margin-left: 0;
+}
+.plaza-inset-mode .feed-gallery-window:not(.detail-post-card .feed-gallery-window) .feed-gallery {
+  padding-left: 47px;
+  box-sizing: border-box;
+  scroll-padding-left: 47px;
+}
+.plaza-inset-mode .feed-gallery-window:not(.detail-post-card .feed-gallery-window) .feed-gallery::after {
+  content: '';
+  flex: 0 0 1px;
+}
+@media (max-width: 380px) {
+  .plaza-inset-mode .feed-gallery-window:not(.detail-post-card .feed-gallery-window) .feed-gallery {
+    padding-left: 47px;
+    scroll-padding-left: 47px;
+  }
+}
+/* ===== End 0702 Multi image swipe hit area full width ===== */
