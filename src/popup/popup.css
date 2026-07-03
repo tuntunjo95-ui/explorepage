@@ -1422,9 +1422,11 @@ body {
 .plaza-layout-switch button.on { background: #fff; color: #24242c; box-shadow: 0 2px 8px rgba(31,31,40,.08); }
 .plaza-composer { width: 100%; min-height: 54px; margin: 0; padding: 8px 13px 8px 10px; border: 0; border-bottom: 1px solid rgba(31,31,40,.075); background: transparent; display: flex; align-items: center; gap: 9px; text-align: left; box-sizing: border-box; }
 .plaza-composer img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex: 0 0 38px; }
-.plaza-composer div { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
-.plaza-composer b { color: #22222a; font-size: 15.5px; line-height: 1.12; font-weight: 850; }
-.plaza-composer span { color: #a6a6af; font-size: 12.5px; line-height: 1.12; font-weight: 650; }
+.plaza-composer-field { min-width: 0; flex: 1 1 auto; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
+.plaza-composer b { color: #22222a; font-size: 15.5px; line-height: 1.08; font-weight: 850; }
+.plaza-composer span { color: #a6a6af; font-size: 12.5px; line-height: 1.08; font-weight: 650; }
+.plaza-composer-post { flex: 0 0 auto; min-width: 62px; height: 36px; padding: 0 17px; border: 0; border-radius: 20px; background: #f1f1f4; color: #6557f4; font: inherit; font-size: 14.5px; font-weight: 850; letter-spacing: 0; box-shadow: inset 0 0 0 1px rgba(101,87,244,.035); cursor: pointer; }
+.plaza-composer-post:active { transform: scale(.96); }
 .feed-list { display: flex; flex-direction: column; gap: 0; }
 .interactive-feed-card { border-radius: 0; margin: 0; padding: 13px 13px 11px 10px; background: transparent; box-shadow: none; border-bottom: 1px solid rgba(31,31,40,.078); container-type: inline-size; }
 .interactive-feed-card:first-child { border-radius: 0; }
@@ -3039,6 +3041,32 @@ body {
 }
 /* ===== End 0702 Post composer match feed type scale ===== */
 
+/* ===== 0703 Post composer avatar match feed ===== */
+.post-author-row {
+  min-height: 38px;
+  margin-bottom: 12px;
+}
+.post-author-row img {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  margin-right: 9px;
+}
+.post-composer-copy {
+  margin-left: 47px;
+}
+@media (max-width: 380px) {
+  .post-author-row img {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+    margin-right: 9px;
+  }
+  .post-composer-copy { margin-left: 47px; }
+}
+/* ===== End 0703 Post composer avatar match feed ===== */
+
+
 
 /* ===== 0702 Multi image swipe hit area full width ===== */
 .plaza-inset-mode .feed-gallery-window:not(.detail-post-card .feed-gallery-window) {
@@ -3060,3 +3088,42 @@ body {
   }
 }
 /* ===== End 0702 Multi image swipe hit area full width ===== */
+
+
+/* ===== 0703 Post composer media align with feed body ===== */
+.post-media-preview.interactive-feed-card {
+  margin-left: 47px;
+  width: calc(100% - 47px);
+  --feed-content-width: 100cqw;
+}
+.post-media-preview.interactive-feed-card:has(.feed-gallery-window) {
+  margin-left: 0;
+  width: 100%;
+  --feed-content-width: calc(100cqw - 47px);
+}
+.post-media-preview:has(.feed-gallery-window) .feed-gallery-window {
+  width: 100%;
+  margin-left: 0;
+}
+.post-media-preview:has(.feed-gallery-window) .feed-gallery {
+  padding-left: 47px;
+  padding-right: max(20px, calc(var(--feed-content-width) * .1));
+  box-sizing: border-box;
+  scroll-padding-left: 47px;
+}
+@media (max-width: 380px) {
+  .post-media-preview.interactive-feed-card {
+    margin-left: 47px;
+    width: calc(100% - 47px);
+  }
+  .post-media-preview.interactive-feed-card:has(.feed-gallery-window) {
+    margin-left: 0;
+    width: 100%;
+    --feed-content-width: calc(100cqw - 47px);
+  }
+  .post-media-preview:has(.feed-gallery-window) .feed-gallery {
+    padding-left: 47px;
+    scroll-padding-left: 47px;
+  }
+}
+/* ===== End 0703 Post composer media align with feed body ===== */

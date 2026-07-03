@@ -382,14 +382,23 @@ function PlazaLayoutSwitch({ layout, onChange }) {
 }
 
 function PlazaComposer({ nav }) {
+  const openComposer = () => nav('post')
+  const handleKeyDown = event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      openComposer()
+    }
+  }
+
   return (
-    <button className="plaza-composer" onClick={() => nav('post')}>
-      <img src={meNav} alt="me" />
-      <div>
+    <div className="plaza-composer" role="button" tabIndex={0} onClick={openComposer} onKeyDown={handleKeyDown}>
+      <img src={meNav} alt="Joxon" />
+      <div className="plaza-composer-field">
         <b>Joxon</b>
         <span>What's new today?</span>
       </div>
-    </button>
+      <button className="plaza-composer-post" type="button" onClick={event => { event.stopPropagation(); openComposer() }}>Post</button>
+    </div>
   )
 }
 
