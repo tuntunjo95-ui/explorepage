@@ -2,8 +2,11 @@ import { useState } from 'react'
 import StatusBar from '../StatusBar'
 import BottomNav from '../BottomNav'
 import meAvatar from '../../assets/avatars/me.png'
-import pinnedBouquet from '../../assets/profile/pinned_bouquet_full.jpg'
-import seaPost from '../../assets/profile/sea_post_full.jpg'
+import colorBlue from '../../assets/plaza/color_blue.png'
+import colorGreen from '../../assets/plaza/color_green.png'
+import colorPurple from '../../assets/plaza/color_purple.png'
+import colorOrange from '../../assets/plaza/color_orange.png'
+import colorRed from '../../assets/plaza/color_red.png'
 
 const tags = ['♌ Leo', 'Sci-Fi', 'Action', 'Fantasy', 'Superhero', 'Blues', 'Jazz', 'K-Pop', 'Fortnite', 'LoL']
 const profileLayouts = [
@@ -11,10 +14,21 @@ const profileLayouts = [
   { key: 'edge', label: '贴边' },
 ]
 
+const imageMeta = (width, height) => ({ width, height, rawRatio: width / height, ratio: Math.max(.23, Math.min(width / height, 4 / 3)) })
+
+const PROFILE_IMAGE_META = {
+  [colorBlue]: imageMeta(1254, 1254),
+  [colorGreen]: imageMeta(1086, 1448),
+  [colorPurple]: imageMeta(941, 1672),
+  [colorOrange]: imageMeta(1448, 1086),
+  [colorRed]: imageMeta(1672, 941),
+}
+
 const profilePosts = [
-  { id: 'pinned', pinned: true, time: '05-08 16:45', views: 158, title: '<b>#PenggunaBaru</b> flowers', image: pinnedBouquet, imageClass: 'bouquet', comments: 1, likes: 1 },
-  { id: 'sea', time: '06-03 20:26', views: 104, wave: '🌊', image: seaPost, imageClass: 'sea', duration: '00:12', comments: 0, likes: 1 },
-  { id: 'intro', time: '05-08 15:03', views: 0, text: "Hey everyone! I'm a Leo. Just joined PopUp today, super excited!", comments: 0, likes: 0 },
+  { id: 'profile-blue-single', pinned: true, time: '05-08 16:45', views: 158, title: '<b>#PenggunaBaru</b> blue square single', photo: colorBlue, comments: 12, likes: 101 },
+  { id: 'profile-green-multi', time: '06-03 20:26', views: 104, text: 'profile carousel: green + purple + orange', photo: colorGreen, photos: [colorGreen, colorPurple, colorOrange], galleryKind: 'mixed', comments: 35, likes: 284 },
+  { id: 'profile-red-wide', time: '05-08 15:03', views: 88, text: 'single image / red wide landscape', photo: colorRed, comments: 27, likes: 220 },
+  { id: 'profile-orange-pair', time: '05-08 14:41', views: 67, text: 'same color combo: orange + orange', photo: colorOrange, photos: [colorOrange, colorOrange], galleryKind: 'landscape', comments: 15, likes: 188 },
 ]
 
 function PhotoIcon() {
@@ -99,9 +113,40 @@ function ActionRow({ comments = 0, likes = 0, onComment, onLike, onShare }) {
   )
 }
 
+function ProfileMediaGallery({ post, onOpenImage }) {
+  const photos = post.photos?.length ? post.photos : (post.photo ? [post.photo] : [])
+  if (!photos.length) return null
+  if (photos.length === 1) {
+    const ratio = PROFILE_IMAGE_META[photos[0]]?.ratio || 1
+    const singleKind = ratio < 0.9 ? 'portrait' : ratio > 1.2 ? 'landscape' : 'square'
+    return (
+      <button className={`feed-photo-button single-${singleKind}`} style={{ '--media-ratio': ratio }} onClick={event => { event.stopPropagation(); onOpenImage(photos[0], post, 0) }} aria-label="View image">
+        <img className="feed-photo" src={photos[0]} alt="" loading="lazy" />
+      </button>
+    )
+  }
+  const firstRatio = PROFILE_IMAGE_META[photos[0]]?.ratio || 1
+  return (
+    <div className={`feed-gallery-window first-${firstRatio >= 1 ? 'landscape' : 'portrait'}`} style={{ '--media-ratio': firstRatio }}>
+      <div className={`feed-gallery gallery-${post.galleryKind || 'mixed'}`} aria-label="Profile photos">
+        {photos.map((photo, index) => {
+          const rawRatio = PROFILE_IMAGE_META[photo]?.rawRatio || 1
+          const displayRatio = Math.min(4 / 3, Math.max(3 / 4, rawRatio))
+          const needsCrop = displayRatio !== rawRatio
+          return (
+            <button key={`${photo}-${index}`} className={`feed-gallery-item ${needsCrop ? 'needs-crop' : 'no-crop'}`} style={{ '--display-ratio': displayRatio }} onClick={event => { event.stopPropagation(); onOpenImage(photo, post, index) }} aria-label={`View image ${index + 1}`}>
+              <img src={photo} alt="" loading="lazy" className="feed-gallery-img" />
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 function ProfilePost({ post, onOpenDetail, onOpenImage }) {
   return (
-    <article className={'profile-post profile-post-' + post.id} onClick={event => { if (!event.target.closest('button, a, input, textarea')) onOpenDetail(post) }}>
+    <article className={'profile-post interactive-feed-card profile-post-' + post.id} onClick={event => { if (!event.target.closest('button, a, input, textarea')) onOpenDetail(post) }}>
       <div className="pinned-meta">
         {post.pinned && <><span className="pin-dot">✦</span><span>Pinned</span></>}
         <span>{post.time}</span>
@@ -109,15 +154,8 @@ function ProfilePost({ post, onOpenDetail, onOpenImage }) {
         <span>•••</span>
       </div>
       {post.title && <div className="post-title" dangerouslySetInnerHTML={{ __html: post.title }} />}
-      {post.wave && <div className="post-wave">{post.wave}</div>}
       {post.text && <div className="profile-post-text"><p>{post.text}</p></div>}
-      {post.image && (
-        <button className={'profile-post-media' + (post.duration ? ' profile-video-frame' : '')} type="button" onClick={event => { event.stopPropagation(); onOpenImage(post) }}>
-          <img className={'profile-post-img ' + post.imageClass} src={post.image} alt="" />
-          {post.duration && <span className="video-duration">{post.duration}</span>}
-          {post.duration && <span className="video-sound">⌕</span>}
-        </button>
-      )}
+      <ProfileMediaGallery post={post} onOpenImage={onOpenImage} />
       <ActionRow comments={post.comments} likes={post.likes} onComment={() => onOpenDetail(post)} onLike={() => {}} onShare={() => {}} />
     </article>
   )
@@ -125,17 +163,18 @@ function ProfilePost({ post, onOpenDetail, onOpenImage }) {
 
 function ProfileImageViewer({ viewer, onClose }) {
   if (!viewer) return null
+  const photos = viewer.photos?.length ? viewer.photos : [viewer.image]
   return (
     <div className="image-viewer media-viewer" role="dialog" aria-modal="true" aria-label="Image preview">
       <StatusBar dark time="11:51" battery={34} />
       <div className="media-viewer-top">
         <button className="media-viewer-close" onClick={onClose} aria-label="Close image"><span aria-hidden="true" /></button>
         <div className="media-viewer-author"><img src={meAvatar} alt="Joxon" /><b>Joxon</b></div>
-        <div className="media-viewer-count">1/1</div>
+        <div className="media-viewer-count">{viewer.index + 1}/{photos.length}</div>
       </div>
       <div className="media-viewer-stage" onClick={onClose}><img src={viewer.image} alt="" onClick={onClose} /></div>
       <div className="media-viewer-bottom">
-        <div className="media-viewer-actions"><button type="button" aria-label="Like"><ProfileHeartIcon /><span>{viewer.likes}</span></button><button type="button" aria-label="Comments"><ProfileCommentIcon /><span>{viewer.comments}</span></button><button type="button" aria-label="Share"><ProfileShareIcon /></button></div>
+        <div className="media-viewer-actions"><button type="button" aria-label="Like"><ProfileHeartIcon /><span>{viewer.post?.likes ?? viewer.likes}</span></button><button type="button" aria-label="Comments"><ProfileCommentIcon /><span>{viewer.post?.comments ?? viewer.comments}</span></button><button type="button" aria-label="Share"><ProfileShareIcon /></button></div>
         <form className="media-viewer-input" onSubmit={event => event.preventDefault()}><input placeholder="Write a comment..." /><button type="button" aria-label="Mention"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" strokeWidth="2.05"/><path d="M15.6 15.1c-.85.75-2.05 1.15-3.25.95-2.05-.35-3.45-2.25-3.1-4.25.32-1.95 2.18-3.25 4.05-2.92 1.75.3 2.95 1.9 2.65 3.58l-.35 2.02c-.18 1.05.45 1.75 1.38 1.58 1.55-.28 2.9-2.05 2.9-4.4 0-4.1-3.02-7.22-7.4-7.22-4.72 0-8.22 3.58-8.22 8.35 0 4.88 3.42 8.22 8.22 8.22 1.35 0 2.6-.25 3.78-.78" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round"/></svg></button><button type="button" aria-label="Photo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="4" fill="none" stroke="currentColor" strokeWidth="2.05"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><path d="m5.8 17 4.4-4.4 3.3 3.35 2.3-2.45 2.7 3.5" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round"/></svg></button><button type="button" aria-label="Emoji"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" strokeWidth="2.05"/><path d="M8.7 14.1c.82 1.18 1.9 1.75 3.3 1.75s2.48-.57 3.3-1.75" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round"/><circle cx="9" cy="10" r="1.1" fill="currentColor"/><circle cx="15" cy="10" r="1.1" fill="currentColor"/></svg></button></form>
       </div>
     </div>
@@ -156,6 +195,10 @@ export default function MyProfile({ nav }) {
   const [layout, setLayout] = useState(() => new URLSearchParams(window.location.search).get('layout') === 'edge' ? 'edge' : 'inset')
   const [viewer, setViewer] = useState(null)
   const [detailPost, setDetailPost] = useState(null)
+  const openProfileImage = (image, post, index = 0) => {
+    const photos = post.photos?.length ? post.photos : (post.photo ? [post.photo] : [image])
+    setViewer({ image, post, index, photos })
+  }
   const changeLayout = next => {
     setLayout(next)
     const url = new URL(window.location.href)
@@ -177,10 +220,10 @@ export default function MyProfile({ nav }) {
         </section>
         <div className="profile-compose"><div className="compose-date">Today</div><div className="compose-prompt">Share a thought or moment</div><div className="photo-drop"><PhotoIcon /> Photo</div></div>
         <ProfileLayoutSwitch layout={layout} onChange={changeLayout} />
-        {profilePosts.map(post => <ProfilePost key={post.id} post={post} onOpenDetail={setDetailPost} onOpenImage={setViewer} />)}
+        {profilePosts.map(post => <ProfilePost key={post.id} post={post} onOpenDetail={setDetailPost} onOpenImage={openProfileImage} />)}
       </div>
       <ProfileImageViewer viewer={viewer} onClose={() => setViewer(null)} />
-      <ProfileDetail post={detailPost} onClose={() => setDetailPost(null)} onOpenImage={setViewer} />
+      <ProfileDetail post={detailPost} onClose={() => setDetailPost(null)} onOpenImage={openProfileImage} />
       <BottomNav active="me" nav={nav} />
     </div>
   )

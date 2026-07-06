@@ -3127,3 +3127,138 @@ body {
   }
 }
 /* ===== End 0703 Post composer media align with feed body ===== */
+
+/* ===== 0703 Profile feed uses plaza media rules ===== */
+.profile-screen .profile-post.interactive-feed-card {
+  background: #fff;
+  margin-top: 10px;
+  padding: 17px 16px 18px;
+  color: #4d4d58;
+  border-radius: 22px;
+  border-bottom: 0;
+  box-shadow: none;
+  container-type: inline-size;
+}
+.profile-compose + .profile-post.interactive-feed-card {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-top: 8px;
+}
+.profile-screen .profile-post .feed-photo-button,
+.profile-screen .profile-post .feed-gallery-window {
+  margin-top: 10px;
+}
+.profile-edge-mode .profile-post.interactive-feed-card {
+  --feed-content-width: 100cqw;
+}
+.profile-edge-mode .profile-post .feed-photo-button,
+.profile-edge-mode .profile-post .feed-gallery-window {
+  margin-left: 0;
+}
+.profile-inset-mode .profile-post .feed-photo-button {
+  margin-left: 47px;
+}
+.profile-inset-mode .profile-post .feed-gallery-window {
+  width: calc(var(--feed-content-width) + 47px);
+  margin-left: 0;
+}
+.profile-inset-mode .profile-post .feed-gallery {
+  padding-left: 47px;
+  box-sizing: border-box;
+  scroll-padding-left: 47px;
+}
+.profile-edge-mode .profile-post .feed-gallery {
+  padding-left: 0;
+  scroll-padding-left: 0;
+}
+.profile-screen .profile-post .feed-photo,
+.profile-screen .profile-post .feed-gallery-img,
+.profile-screen .profile-post .feed-photo-button,
+.profile-screen .profile-post .feed-gallery-window,
+.profile-screen .profile-post .feed-gallery-item {
+  border-radius: 8px;
+}
+.profile-detail-scroll .profile-post.interactive-feed-card {
+  border-radius: 0;
+  margin-top: 0;
+}
+.profile-detail-scroll .profile-post .feed-photo-button,
+.profile-detail-scroll .profile-post .feed-gallery-window,
+.profile-detail-scroll .profile-post .profile-post-actions.feed-metrics-buttons {
+  width: 100%;
+  margin-left: 0;
+}
+.profile-detail-scroll .profile-post .feed-gallery {
+  padding-left: 0;
+  scroll-padding-left: 0;
+}
+/* ===== End 0703 Profile feed uses plaza media rules ===== */
+
+/* ===== 0706 Profile feed text scale match plaza ===== */
+.profile-screen .profile-post .pinned-meta {
+  color: #9c9ca6;
+  font-size: 12.5px;
+  line-height: 1.12;
+  font-weight: 560;
+}
+.profile-screen .profile-post .post-title,
+.profile-screen .profile-post .profile-post-text p {
+  color: #15151b;
+  font-size: 15.8px;
+  line-height: 1.34;
+  font-weight: 590;
+  letter-spacing: 0;
+}
+.profile-screen .profile-post .post-title {
+  margin: 11px 0 9px;
+}
+.profile-screen .profile-post .post-title b {
+  font-weight: 650;
+}
+.profile-screen .profile-post .profile-post-text p {
+  margin: 11px 0 9px;
+}
+.profile-screen .profile-post-actions.feed-metrics-buttons,
+.profile-screen .profile-post-actions.feed-metrics-buttons button {
+  font-size: 12px;
+  font-weight: 680;
+}
+.profile-screen .profile-post .post-views {
+  font-size: 12.5px;
+  font-weight: 560;
+}
+/* ===== End 0706 Profile feed text scale match plaza ===== */
+
+/* ===== 0706 Profile inset/detail text alignment fix ===== */
+.profile-inset-mode .profile-scroll > .profile-post .post-title,
+.profile-inset-mode .profile-scroll > .profile-post .profile-post-text,
+.profile-inset-mode .profile-scroll > .profile-post .profile-post-actions.feed-metrics-buttons {
+  width: calc(100% - 47px);
+  margin-left: 47px;
+}
+.profile-inset-mode .profile-scroll > .profile-post .post-title {
+  margin-top: 11px;
+  margin-right: 0;
+  margin-bottom: 9px;
+}
+.profile-inset-mode .profile-scroll > .profile-post .profile-post-text p {
+  margin: 11px 0 9px;
+}
+.profile-detail-scroll .profile-post .pinned-meta,
+.profile-detail-scroll .profile-post .post-title,
+.profile-detail-scroll .profile-post .profile-post-text,
+.profile-detail-scroll .profile-post .profile-post-actions.feed-metrics-buttons,
+.profile-detail-scroll .profile-post .feed-photo-button,
+.profile-detail-scroll .profile-post .feed-gallery-window {
+  width: 100%;
+  margin-left: 0;
+}
+.profile-detail-scroll .profile-post .post-title {
+  margin-top: 11px;
+  margin-right: 0;
+  margin-bottom: 9px;
+}
+.profile-detail-scroll .profile-post .profile-post-text p {
+  margin: 11px 0 9px;
+}
+/* ===== End 0706 Profile inset/detail text alignment fix ===== */

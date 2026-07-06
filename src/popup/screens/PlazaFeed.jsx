@@ -351,13 +351,11 @@ function FeedCard({ post, followed, liked, commentCount, onFollow, onLike, onCom
       )}
       <p className="feed-text">{post.text}</p>
       <MediaGallery post={post} onOpenImage={onOpenImage} />
-      {!detail && (
-        <div className="feed-metrics feed-metrics-buttons">
-          <button className={liked ? 'liked' : ''} onClick={stop(onLike)} aria-label={liked ? 'Unlike' : 'Like'}><HeartIcon active={liked} /><span>{post.likes + (liked ? 1 : 0)}</span></button>
-          <button onClick={stop(onComment)} aria-label="Comments"><CommentIcon /><span>{commentCount}</span></button>
-          <button onClick={stop(onShare)} aria-label="Share"><ShareIcon /></button>
-        </div>
-      )}
+      <div className="feed-metrics feed-metrics-buttons">
+        <button className={liked ? 'liked' : ''} onClick={stop(onLike)} aria-label={liked ? 'Unlike' : 'Like'}><HeartIcon active={liked} /><span>{post.likes + (liked ? 1 : 0)}</span></button>
+        <button onClick={stop(onComment)} aria-label="Comments"><CommentIcon /><span>{commentCount}</span></button>
+        <button onClick={stop(onShare)} aria-label="Share"><ShareIcon /></button>
+      </div>
       {!detail && (
         <button className="feed-comment feed-comment-button" onClick={stop(onComment)}>
           <img src={post.commentAvatar} alt={post.commentName} />
