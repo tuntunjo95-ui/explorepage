@@ -79,17 +79,17 @@ function ProfileLayoutSwitch({ layout, onChange }) {
 
 function ProfileHeartIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M20.3 5.9c-1.7-1.9-4.5-1.8-6.1 0L12 8.2 9.8 5.9c-1.6-1.8-4.4-1.9-6.1 0-1.8 2-1.5 5 .4 6.9l7.1 6.8c.5.4 1.1.4 1.6 0l7.1-6.8c1.9-1.9 2.2-4.9.4-6.9Z" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M20.25 5.85c-1.74-1.77-4.56-1.77-6.3 0L12 7.83l-1.95-1.98a4.42 4.42 0 0 0-6.3 0c-1.72 1.75-1.72 4.6 0 6.35L12 20.3l8.25-8.1a4.54 4.54 0 0 0 0-6.35Z" />
     </svg>
   )
 }
 
 function ProfileCommentIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="8.2" />
-      <path d="M8.3 10.2h7.4M8.3 13.8h4.5" />
+      <path d="M8.2 10.15h7.6M8.2 13.7h4.8" />
     </svg>
   )
 }
