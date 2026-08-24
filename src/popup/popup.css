@@ -4161,3 +4161,154 @@ body {
   line-height: 18px;
 }
 /* ===== End 0824 portrait single-image tangible comparison ===== */
+
+/* ===== 0824 unified feed actions, infinite preload, and media rules ===== */
+.feed-metrics-buttons button svg.feed-heart-icon,
+.feed-metrics-buttons button svg.feed-comment-icon,
+.feed-metrics-buttons button:first-child svg.feed-heart-icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+}
+
+.plaza-scroll {
+  position: relative;
+  overscroll-behavior-y: auto;
+}
+
+.feed-metrics-buttons button,
+.feed-metrics-buttons button:first-child {
+  color: #38383e;
+}
+
+.feed-metrics-buttons button.liked {
+  color: #ef4056;
+}
+
+.anonymous-mode .feed-metrics-buttons button,
+.anonymous-mode .feed-metrics-buttons button:first-child {
+  color: rgba(255, 255, 255, .92);
+}
+
+.anonymous-mode .feed-metrics-buttons button.liked {
+  color: #ff5b6f;
+}
+
+.feed-metrics-buttons button.liked .feed-heart-icon {
+  animation: feedHeartPop .28s cubic-bezier(.2, .9, .3, 1.35);
+}
+
+@keyframes feedHeartPop {
+  0% { transform: scale(.72); }
+  62% { transform: scale(1.16); }
+  100% { transform: scale(1); }
+}
+
+.feed-preload-skeleton {
+  background: #fff;
+  border-bottom: 1px solid var(--plaza-divider);
+}
+
+.preload-skeleton-card {
+  min-height: 96px;
+  padding: 15px 14px 14px 12px;
+  border-bottom: 1px solid var(--plaza-divider);
+  display: flex;
+  gap: 10px;
+}
+
+.preload-skeleton-card:last-child {
+  border-bottom: 0;
+}
+
+.preload-skeleton-avatar,
+.preload-skeleton-copy i {
+  display: block;
+  border-radius: 999px;
+  background: linear-gradient(100deg, #f0f0f2 18%, #f8f8f9 38%, #f0f0f2 58%);
+  background-size: 220% 100%;
+  animation: plazaSkeletonShimmer 1.1s ease-in-out infinite;
+}
+
+.preload-skeleton-avatar {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+}
+
+.preload-skeleton-copy {
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.preload-skeleton-copy .preload-skeleton-name {
+  width: 34%;
+  height: 12px;
+  margin-bottom: 12px;
+}
+
+.preload-skeleton-copy .preload-skeleton-line {
+  width: 92%;
+  height: 11px;
+  margin-bottom: 9px;
+}
+
+.preload-skeleton-copy .preload-skeleton-line.short {
+  width: 68%;
+}
+
+@keyframes plazaSkeletonShimmer {
+  0% { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
+}
+
+/* One rule set for real photos and the earlier solid-color QA posts. */
+.interactive-feed-card {
+  --single-square-size: min(calc(100cqw - 52px), 300px);
+  --responsive-multi-height: clamp(216px, calc(var(--vh) * .27), 235px);
+}
+
+.feed-photo-button.single-landscape {
+  width: calc(100cqw - 52px);
+  height: min(calc((100cqw - 52px) / var(--media-ratio)), 235px);
+  max-height: 235px;
+}
+
+.feed-photo-button.single-square {
+  width: var(--single-square-size);
+  height: var(--single-square-size);
+  max-height: 300px;
+}
+
+.feed-photo-button.single-portrait {
+  --responsive-portrait-height: min(calc((100cqw - 52px) / var(--media-ratio)), min(calc(var(--vh) * .44), 375px));
+  width: calc(var(--responsive-portrait-height) * var(--media-ratio));
+  height: var(--responsive-portrait-height);
+  max-height: 375px;
+}
+
+.feed-photo-button.solid-color-media .feed-photo,
+.feed-gallery-window.solid-color-media .feed-gallery-img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.anonymous-mode .feed-preload-skeleton {
+  background: transparent;
+}
+
+.anonymous-mode .preload-skeleton-avatar,
+.anonymous-mode .preload-skeleton-copy i {
+  background: linear-gradient(100deg, rgba(255,255,255,.06) 18%, rgba(255,255,255,.12) 38%, rgba(255,255,255,.06) 58%);
+  background-size: 220% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feed-metrics-buttons button.liked .feed-heart-icon,
+  .preload-skeleton-avatar,
+  .preload-skeleton-copy i {
+    animation: none;
+  }
+}
+/* ===== End unified feed actions, infinite preload, and media rules ===== */
