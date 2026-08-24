@@ -36,12 +36,28 @@ function Stub({ title, nav, active }) {
 }
 
 const qs = new URLSearchParams(location.search)
+const DEVICE_PRESETS = [
+  { key: 'android-compact', label: 'Android Compact', width: 360, height: 800 },
+  { key: 'iphone-compact', label: 'iPhone Compact', width: 375, height: 812 },
+  { key: 'iphone-standard', label: 'iPhone Standard', width: 393, height: 852 },
+  { key: 'iphone-pro', label: 'iPhone Pro', width: 402, height: 874 },
+  { key: 'large', label: 'Large / Max', width: 430, height: 932 },
+]
+
 export default function App() {
   const [screen, setScreen] = useState(qs.get('s') || 'message')
   const [param, setParam] = useState(qs.get('p') || null)
+  const [deviceKey, setDeviceKey] = useState(qs.get('device') || 'iphone-pro')
   // 同频信号方案对比器的选中态托管在 App 级，进私聊再返回时不丢失（修复返回总回到轻量的 bug）
   const [scheme, setScheme] = useState(qs.get('scheme') || 'a')
   const nav = (s, p = null) => { setScreen(s); setParam(p) }
+  const devicePreset = DEVICE_PRESETS.find(item => item.key === deviceKey) || DEVICE_PRESETS[3]
+  const changeDevice = next => {
+    setDeviceKey(next.key)
+    const url = new URL(window.location.href)
+    url.searchParams.set('device', next.key)
+    window.history.replaceState(window.history.state, '', url)
+  }
 
   // 案例页全屏展示（不套手机外框，给领导在电脑上看前后对比）
   if (screen === 'showcase') return <Showcase nav={nav} />
@@ -56,7 +72,7 @@ export default function App() {
     case 'other': view = <OtherProfile nav={nav} peer={param} />; break
     case 'match': view = <MatchHome nav={nav} />; break
     case 'rooms': view = <RoomList nav={nav} />; break
-    case 'plaza': view = <PlazaFeed nav={nav} />; break
+    case 'plaza': view = <PlazaFeed nav={nav} devicePreset={devicePreset} devicePresets={DEVICE_PRESETS} onDeviceChange={changeDevice} />; break
     case 'me': view = <MyProfile nav={nav} />; break
     case 'profile-edit': view = <ProfileEdit nav={nav} />; break
     case 'vibe': view = <VibeTest nav={nav} />; break
@@ -69,8 +85,19 @@ export default function App() {
   }
 
   return (
-    <div className="stage">
-      <div className="device">{view}</div>
+    <div className={`stage${screen === 'plaza' ? ' plaza-preview-stage' : ''}`}>
+      {screen === 'plaza' && (
+        <div className="device-size-picker" role="group" aria-label="Common screen sizes">
+          <span className="device-size-picker-title">Screen</span>
+          {DEVICE_PRESETS.map(item => (
+            <button key={item.key} className={devicePreset.key === item.key ? 'on' : ''} onClick={() => changeDevice(item)} type="button">
+              <b>{item.label}</b>
+              <small>{item.width}×{item.height}</small>
+            </button>
+          ))}
+        </div>
+      )}
+      <div className="device" style={{ '--vw': `${devicePreset.width}px`, '--vh': `${devicePreset.height}px` }}>{view}</div>
     </div>
   )
 }
