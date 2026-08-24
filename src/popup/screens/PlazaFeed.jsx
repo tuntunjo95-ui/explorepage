@@ -108,17 +108,35 @@ function FollowIcon({ active = false }) {
 
 function CommentIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20.2 11.7c0 4.05-3.62 7.15-8.35 7.15-1.06 0-2.06-.15-2.98-.44l-3.14 1.47c-.62.29-1.27-.28-1.04-.92l.7-2.57a6.72 6.72 0 0 1-1.89-4.69c0-4.02 3.6-7.1 8.35-7.1s8.35 3.08 8.35 7.1Z" />
+    <svg className="feed-comment-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="8.2" />
+      <path d="M8.2 10.15h7.6M8.2 13.7h4.8" />
     </svg>
   )
 }
 
-function HeartIcon({ small = false }) {
+function HeartIcon({ small = false, active = false }) {
   return (
-    <svg width={small ? 20 : 26} height={small ? 20 : 26} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20.3 5.9c-1.7-1.9-4.5-1.8-6.1 0L12 8.2 9.8 5.9c-1.6-1.8-4.4-1.9-6.1 0-1.8 2-1.5 5 .4 6.9l7.1 6.8c.5.4 1.1.4 1.6 0l7.1-6.8c1.9-1.9 2.2-4.9.4-6.9Z" />
+    <svg className="feed-heart-icon" width={small ? 20 : 24} height={small ? 20 : 24} viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M20.25 5.85c-1.74-1.77-4.56-1.77-6.3 0L12 7.83l-1.95-1.98a4.42 4.42 0 0 0-6.3 0c-1.72 1.75-1.72 4.6 0 6.35L12 20.3l8.25-8.1a4.54 4.54 0 0 0 0-6.35Z" />
     </svg>
+  )
+}
+
+function FeedPreloadSkeleton() {
+  return (
+    <div className="feed-preload-skeleton" role="status" aria-label="Loading more posts">
+      {[0, 1].map(index => (
+        <div className="preload-skeleton-card" key={index}>
+          <i className="preload-skeleton-avatar" />
+          <div className="preload-skeleton-copy">
+            <i className="preload-skeleton-name" />
+            <i className="preload-skeleton-line" />
+            <i className="preload-skeleton-line short" />
+          </div>
+        </div>
+      ))}
+    </div>
   )
 }
 
@@ -161,6 +179,8 @@ const IMAGE_META = {
   [colorRed]: imageMeta(1672, 941),
 }
 
+const SOLID_COLOR_IMAGES = new Set([colorBlue, colorGreen, colorPurple, colorOrange, colorRed])
+
 const RATIO_DEMOS = [
   ['16:9', 16 / 9],
   ['4:3', 4 / 3],
@@ -199,8 +219,51 @@ const RATIO_DEMO_POSTS = RATIO_DEMOS.map(([label, mediaRatio], index) => ({
   commentLikes: 2,
 }))
 
+const TEXT_ONLY_POSTS = [
+  {
+    id: 'text-only-quiet', tab: 'Explore', name: 'farah', time: 'now', avatar: bethAvatar,
+    text: 'What is one small thing that made today feel better?',
+    comments: 18, likes: 92, commentName: 'nadzira', commentAvatar: senjaAvatar, comment: 'a slow breakfast before work', commentLikes: 6,
+  },
+  {
+    id: 'text-only-late-night', tab: 'Explore', name: 'alyssa', time: '1 minute ago', avatar: roseAvatar,
+    text: 'Late-night conversations always feel more honest somehow.',
+    tag: '#latenighttalk', tagPosts: 824,
+    comments: 31, likes: 147, commentName: 'luna', commentAvatar: calistaAvatar, comment: 'because nobody is rushing', commentLikes: 12,
+  },
+  {
+    id: 'text-only-indonesia', tab: 'Explore', name: 'nadzira', time: '2 minutes ago', avatar: senjaAvatar,
+    text: 'Ada yang hari ini capek tapi tetap pura-pura baik-baik saja?',
+    comments: 46, likes: 206, commentName: 'farah', commentAvatar: bethAvatar, comment: 'aku, tapi besok coba lagi', commentLikes: 19,
+  },
+  {
+    id: 'text-only-weekend', tab: 'Explore', name: 'nana', time: '3 minutes ago', avatar: tikaaAvatar,
+    text: 'No plans this weekend. Recommend me one song and one comfort movie.',
+    tag: '#weekendmood', tagPosts: 2306,
+    comments: 64, likes: 189, commentName: 'mai anh', commentAvatar: dedeAvatar, comment: 'I already have a whole list', commentLikes: 14,
+  },
+  {
+    id: 'text-only-friends', tab: 'Explore', name: 'safiya', time: '4 minutes ago', avatar: dedeAvatar,
+    text: 'The best kind of friendship is when silence never feels awkward.',
+    comments: 22, likes: 174, commentName: 'luna', commentAvatar: roseAvatar, comment: 'this is so rare and special', commentLikes: 11,
+  },
+  {
+    id: 'text-only-random', tab: 'Explore', name: 'luna', time: '5 minutes ago', avatar: calistaAvatar,
+    text: 'Tell me a completely random fact you still remember from school.',
+    comments: 73, likes: 118, commentName: 'alyssa', commentAvatar: blueAvatar, comment: 'octopuses have three hearts', commentLikes: 21,
+  },
+  {
+    id: 'text-only-anonymous', tab: 'Anonymous', name: 'Anonymous', time: '6 minutes ago', avatar: blueAvatar,
+    text: 'I miss someone I know I should not text again.',
+    anonymousPostingCount: 21201,
+    comments: 58, likes: 244, commentName: 'Anonymous', commentAvatar: dedeAvatar, comment: 'write it here instead of sending it', commentLikes: 32,
+  },
+]
+
+const RATIO_AND_TEXT_POSTS = RATIO_DEMO_POSTS.flatMap((post, index) => [post, TEXT_ONLY_POSTS[index]])
+
 const POSTS = [
-  ...RATIO_DEMO_POSTS,
+  ...RATIO_AND_TEXT_POSTS,
   {
     id: 'single-blue', tab: 'Explore', name: 'Blue sample', time: '1 second ago', avatar: senjaAvatar, photo: colorBlue,
     text: 'single image / blue square',
@@ -326,18 +389,19 @@ const BASE_COMMENTS = {
 function MediaGallery({ post, onOpenImage }) {
   const photos = post.photos?.length ? post.photos : (post.photo ? [post.photo] : [])
   if (!photos.length) return null
+  const isSolidColorMedia = photos.every(photo => SOLID_COLOR_IMAGES.has(photo))
   if (photos.length === 1) {
     const ratio = post.mediaRatio || IMAGE_META[photos[0]]?.ratio || 1
     const singleKind = ratio < 0.9 ? 'portrait' : ratio > 1.2 ? 'landscape' : 'square'
     return (
-      <button className={`feed-photo-button single-${singleKind}${post.ratioDemo ? ' single-ratio-demo' : ''}`} style={{ '--media-ratio': ratio }} onClick={event => { event.stopPropagation(); onOpenImage(photos[0], post, 0) }} aria-label="View image">
+      <button className={`feed-photo-button single-${singleKind}${post.ratioDemo ? ' single-ratio-demo' : ''}${isSolidColorMedia ? ' solid-color-media' : ''}`} style={{ '--media-ratio': ratio }} onClick={event => { event.stopPropagation(); onOpenImage(photos[0], post, 0) }} aria-label="View image">
         <img className="feed-photo" src={photos[0]} alt="" loading="lazy" />
       </button>
     )
   }
   const firstRatio = IMAGE_META[photos[0]]?.ratio || 1
   return (
-    <div className={`feed-gallery-window first-${firstRatio >= 1 ? 'landscape' : 'portrait'}`} style={{ '--media-ratio': firstRatio }}>
+    <div className={`feed-gallery-window first-${firstRatio >= 1 ? 'landscape' : 'portrait'}${isSolidColorMedia ? ' solid-color-media' : ''}`} style={{ '--media-ratio': firstRatio }}>
       <div className={`feed-gallery gallery-${post.galleryKind || 'mixed'}`} aria-label={`${post.name} photos`}>
         {photos.map((photo, index) => {
           const rawRatio = IMAGE_META[photo]?.rawRatio || 1
@@ -373,7 +437,7 @@ function ImageViewer({ viewer, onClose, liked = false, commentCount = 0, onLike 
       </div>
       <div className="media-viewer-bottom">
         <div className="media-viewer-actions">
-          <button className={liked ? 'liked' : ''} onClick={onLike} aria-label={liked ? 'Unlike' : 'Like'}><HeartIcon /><span>{post ? post.likes + (liked ? 1 : 0) : ''}</span></button>
+          <button className={liked ? 'liked' : ''} onClick={onLike} aria-label={liked ? 'Unlike' : 'Like'}><HeartIcon active={liked} /><span>{post ? post.likes + (liked ? 1 : 0) : ''}</span></button>
           <button type="button" aria-label="Comments"><CommentIcon /><span>{commentCount || 0}</span></button>
           <button onClick={onShare} aria-label="Share"><ShareIcon /></button>
         </div>
@@ -572,11 +636,15 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
   const [visiblePromptId, setVisiblePromptId] = useState(null)
   const [immersive, setImmersive] = useState(false)
   const [imageViewer, setImageViewer] = useState(null)
+  const [visibleCount, setVisibleCount] = useState(12)
+  const [preloadState, setPreloadState] = useState('idle')
   const lastScrollTop = useRef(0)
   const scrollTravel = useRef(0)
   const scrollRef = useRef(null)
   const promptTimer = useRef(null)
   const lastDwellPost = useRef(null)
+  const preloadTimer = useRef(null)
+  const preloadPending = useRef(false)
 
   const visiblePosts = useMemo(() => {
     const normalized = query.trim().toLowerCase()
@@ -586,6 +654,7 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
       return inTab && inSearch
     })
   }, [tab, query])
+  const renderedPosts = visiblePosts.slice(0, visibleCount)
 
   const flash = text => {
     setNotice(text)
@@ -613,6 +682,18 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
     }))
     setDraft('')
     flash('Comment posted')
+  }
+
+  const triggerPreload = () => {
+    if (preloadPending.current || visibleCount >= visiblePosts.length) return
+    preloadPending.current = true
+    setPreloadState('loading')
+    window.clearTimeout(preloadTimer.current)
+    preloadTimer.current = window.setTimeout(() => {
+      setVisibleCount(count => Math.min(count + 8, visiblePosts.length))
+      setPreloadState('idle')
+      preloadPending.current = false
+    }, 720)
   }
 
   const clearPromptTimer = () => {
@@ -664,6 +745,8 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
     }
     lastScrollTop.current = top
     schedulePromptForFocusedPost()
+    const remaining = scroller.scrollHeight - top - scroller.clientHeight
+    if (remaining < Math.max(420, scroller.clientHeight * .65)) triggerPreload()
   }
 
   useEffect(() => {
@@ -675,10 +758,19 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
   }, [tab, query, visiblePosts.length])
 
   useEffect(() => {
+    window.clearTimeout(preloadTimer.current)
+    preloadPending.current = false
+    setPreloadState('idle')
+    setVisibleCount(12)
+  }, [tab, query])
+
+  useEffect(() => {
     const onPopState = () => setDetailPost(null)
     window.addEventListener('popstate', onPopState)
     return () => window.removeEventListener('popstate', onPopState)
   }, [])
+
+  useEffect(() => () => window.clearTimeout(preloadTimer.current), [])
 
   if (detailPost) {
     return (
@@ -711,7 +803,7 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
         <header className="plaza-header">
           <div className="plaza-tabs-title">
             <button className="plaza-following" onClick={() => { setTab('Social'); flash('Switched to people you follow') }}>Following<i /></button>
-            <button className="plaza-for-you" onClick={() => { setTab('Explore'); flash('For You refreshed') }}>For You</button>
+            <button className="plaza-for-you" onClick={() => setTab('Explore')}>For You</button>
           </div>
           <div className="plaza-actions">
             <button aria-label="Search" onClick={() => setQueryOpen(true)}><SearchIcon /></button>
@@ -737,7 +829,7 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
         {tab === 'Explore' && <PlazaComposer nav={nav} />}
 
         <div className="feed-list">
-          {visiblePosts.map(post => (
+          {renderedPosts.map(post => (
             <FeedCard
               key={post.id}
               post={post}
@@ -764,6 +856,7 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
               showPrompt={visiblePromptId === post.id}
             />
           ))}
+          {preloadState === 'loading' && <FeedPreloadSkeleton />}
           {!visiblePosts.length && <div className="plaza-empty">No posts match that search.</div>}
         </div>
       </div>
