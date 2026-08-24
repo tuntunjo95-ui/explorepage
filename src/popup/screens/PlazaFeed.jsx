@@ -67,9 +67,24 @@ function ShareIcon() {
 function ChatBubbleIcon() {
   return (
     <svg className="feed-chat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M5.4 17.4c-1.35-1.28-2.1-3.02-2.1-4.92 0-4.06 3.6-7.18 8.48-7.18 4.92 0 8.5 3.12 8.5 7.18 0 4.08-3.58 7.18-8.5 7.18-1.02 0-1.98-.13-2.86-.4l-3.28 1.54c-.54.25-1.08-.25-.88-.8l.64-2.6Z" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M8.7 12.25h6.6M8.7 15.05h4.05" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" />
-      <circle cx="17.35" cy="7.25" r="2.35" fill="currentColor" />
+      <path d="M5.1 5.5h13.8c1.1 0 2 .9 2 2v8.1c0 1.1-.9 2-2 2H10l-4.9 3v-3H5.1c-1.1 0-2-.9-2-2V7.5c0-1.1.9-2 2-2Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7.6 10.1h8.8M7.6 13.5h5.8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function AvatarFollowPlus() {
+  return (
+    <svg className="feed-follow-plus" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M6.5 12h11M12 6.5v11" stroke="currentColor" strokeWidth="2.35" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function AvatarFollowCheck() {
+  return (
+    <svg className="feed-follow-check" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="m6.2 12.4 3.8 3.8 7.8-8" stroke="currentColor" strokeWidth="2.45" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
@@ -83,10 +98,10 @@ function FollowIcon({ active = false }) {
     )
   }
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="#6557f5">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
       <circle cx="9" cy="7.2" r="3.5" />
       <path d="M2.8 18.7c.55-4.1 3.05-6.2 6.2-6.2 2.7 0 4.9 1.55 5.8 4.58.22.76-.36 1.52-1.16 1.52H4.02c-.75 0-1.32-.66-1.22-1.4Z" />
-      <path d="M17.8 10.5v6.6M14.5 13.8h6.6" stroke="#6557f5" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M17.8 10.5v6.6M14.5 13.8h6.6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
     </svg>
   )
 }
@@ -94,8 +109,7 @@ function FollowIcon({ active = false }) {
 function CommentIcon() {
   return (
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="8.2" />
-      <path d="M8.3 10.2h7.4M8.3 13.8h4.5" />
+      <path d="M20.2 11.7c0 4.05-3.62 7.15-8.35 7.15-1.06 0-2.06-.15-2.98-.44l-3.14 1.47c-.62.29-1.27-.28-1.04-.92l.7-2.57a6.72 6.72 0 0 1-1.89-4.69c0-4.02 3.6-7.1 8.35-7.1s8.35 3.08 8.35 7.1Z" />
     </svg>
   )
 }
@@ -108,11 +122,15 @@ function HeartIcon({ small = false }) {
   )
 }
 
+function ChevronIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="m6 3.5 4.2 4.5L6 12.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 const TABS = ['Explore', 'Social', 'Anonymous', 'Latest']
-const LAYOUTS = [
-  { key: 'inset', label: '不贴边' },
-  { key: 'edge', label: '贴边' },
-]
 const SEARCH_HISTORY = ['52112691', 'Rumpita', 'coldStart']
 const HOT_TOPICS = ['textsnap', 'gabut tuh', 'K-pop', 'curhat malam']
 
@@ -143,10 +161,50 @@ const IMAGE_META = {
   [colorRed]: imageMeta(1672, 941),
 }
 
+const RATIO_DEMOS = [
+  ['16:9', 16 / 9],
+  ['4:3', 4 / 3],
+  ['1:1', 1],
+  ['4:5', 4 / 5],
+  ['3:4', 3 / 4],
+  ['2:3', 2 / 3],
+  ['9:16', 9 / 16],
+]
+
+const RATIO_DEMO_COPY = [
+  { name: 'nadzira', text: 'The sunset looked unreal on my way home today.', comment: 'this view is everything' },
+  { name: 'farah', text: 'Makan siang sederhana, tapi suasananya bikin betah.', comment: 'looks so peaceful' },
+  { name: 'alyssa', text: 'A little reminder to slow down and enjoy the moment.', comment: 'needed this today' },
+  { name: 'mai anh', text: 'Trời hôm nay đẹp quá, chỉ muốn đi dạo thật lâu.', comment: 'đẹp thật đó' },
+  { name: 'safiya', text: 'Found a quiet corner and stayed there longer than planned.', comment: 'such a calm place' },
+  { name: 'nana', text: 'Weekend mood: good music, cold drinks, no rush.', comment: 'perfect weekend' },
+  { name: 'luna', text: 'Some days feel softer when you stop trying to hurry.', comment: 'I love this feeling' },
+]
+
+const RATIO_DEMO_POSTS = RATIO_DEMOS.map(([label, mediaRatio], index) => ({
+  id: `single-ratio-${label.replace(':', '-')}`,
+  tab: 'Explore',
+  name: RATIO_DEMO_COPY[index].name,
+  time: 'now',
+  avatar: senjaAvatar,
+  photo: senjaPhoto,
+  mediaRatio,
+  ratioDemo: true,
+  text: RATIO_DEMO_COPY[index].text,
+  comments: 8 + index,
+  likes: 86 + index * 7,
+  commentName: 'Santy',
+  commentAvatar: santyAvatar,
+  comment: RATIO_DEMO_COPY[index].comment,
+  commentLikes: 2,
+}))
+
 const POSTS = [
+  ...RATIO_DEMO_POSTS,
   {
     id: 'single-blue', tab: 'Explore', name: 'Blue sample', time: '1 second ago', avatar: senjaAvatar, photo: colorBlue,
     text: 'single image / blue square',
+    tag: '#modalnekat', tagPosts: 1415,
     comments: 12, likes: 101, commentName: 'Santy', commentAvatar: santyAvatar, comment: 'square single looks clear', commentLikes: 3,
   },
   {
@@ -167,6 +225,7 @@ const POSTS = [
   {
     id: 'single-red', tab: 'Anonymous', name: 'Anonymous', time: '18 seconds ago', avatar: blueAvatar, photo: colorRed,
     text: 'single image / red wide landscape',
+    anonymousPostingCount: 21201,
     comments: 27, likes: 220, commentName: 'Anonymous', commentAvatar: dedeAvatar, comment: 'wide single checked', commentLikes: 9,
   },
   {
@@ -192,6 +251,7 @@ const POSTS = [
   {
     id: 'multi-red', tab: 'Anonymous', name: 'Anonymous', time: '50 seconds ago', avatar: blueAvatar, photo: colorRed, photos: [colorRed, colorBlue], galleryKind: 'landscape',
     text: 'multi image led by red: red + blue',
+    anonymousPostingCount: 21201,
     comments: 51, likes: 352, commentName: 'Anonymous', commentAvatar: dedeAvatar, comment: 'red first image', commentLikes: 14,
   },
   {
@@ -267,10 +327,10 @@ function MediaGallery({ post, onOpenImage }) {
   const photos = post.photos?.length ? post.photos : (post.photo ? [post.photo] : [])
   if (!photos.length) return null
   if (photos.length === 1) {
-    const ratio = IMAGE_META[photos[0]]?.ratio || 1
+    const ratio = post.mediaRatio || IMAGE_META[photos[0]]?.ratio || 1
     const singleKind = ratio < 0.9 ? 'portrait' : ratio > 1.2 ? 'landscape' : 'square'
     return (
-      <button className={`feed-photo-button single-${singleKind}`} style={{ '--media-ratio': ratio }} onClick={event => { event.stopPropagation(); onOpenImage(photos[0], post, 0) }} aria-label="View image">
+      <button className={`feed-photo-button single-${singleKind}${post.ratioDemo ? ' single-ratio-demo' : ''}`} style={{ '--media-ratio': ratio }} onClick={event => { event.stopPropagation(); onOpenImage(photos[0], post, 0) }} aria-label="View image">
         <img className="feed-photo" src={photos[0]} alt="" loading="lazy" />
       </button>
     )
@@ -328,7 +388,32 @@ function ImageViewer({ viewer, onClose, liked = false, commentCount = 0, onLike 
   )
 }
 
-function FeedCard({ post, followed, liked, commentCount, onFollow, onLike, onComment, onShare, onMore, onOpenImage, onOpenDetail, detail = false, showPrompt = false }) {
+function PostContextRow({ post, onOpen }) {
+  if (post.tab === 'Anonymous') {
+    return (
+      <button className="feed-context-row anonymous-context-row" onClick={onOpen} type="button">
+        <span className="anonymous-context-avatars" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+        </span>
+        <span>{post.anonymousPostingCount || 21201} users are posting anonymously</span>
+        <ChevronIcon />
+      </button>
+    )
+  }
+
+  if (!post.tag) return null
+  return (
+    <button className="feed-context-row tag-context-row" onClick={onOpen} type="button">
+      <span className="tag-context-name">{post.tag}</span>
+      <span>{post.tagPosts || 0} Posts</span>
+      <ChevronIcon />
+    </button>
+  )
+}
+
+function FeedCard({ post, followed, liked, commentCount, onFollow, onChat, onLike, onComment, onShare, onMore, onContext, onOpenImage, onOpenDetail, detail = false, showPrompt = false }) {
   const stop = handler => event => { event.stopPropagation(); handler?.(event) }
   const handleCardClick = event => {
     if (detail || event.target.closest('button, a, input, textarea')) return
@@ -343,20 +428,22 @@ function FeedCard({ post, followed, liked, commentCount, onFollow, onLike, onCom
             <div className="feed-name">{post.name}</div>
             <div className="feed-time">{post.time}</div>
           </div>
-          <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={stop(onFollow)} aria-label={followed ? 'Chat' : 'Follow'}>
-            {followed ? <ChatBubbleIcon /> : <FollowIcon />}
+          <button className={`feed-follow${followed ? ' followed' : ''}`} onClick={stop(onFollow)} aria-label={followed ? 'Following' : 'Follow'}>
+            {followed ? <AvatarFollowCheck /> : <AvatarFollowPlus />}
           </button>
+          {followed && <button className="feed-chat-action" onClick={stop(onChat)} aria-label="Chat">Chat</button>}
           <button className="feed-more" onClick={stop(onMore)} aria-label="More">•••</button>
         </div>
       )}
       <p className="feed-text">{post.text}</p>
       <MediaGallery post={post} onOpenImage={onOpenImage} />
+      {!detail && <PostContextRow post={post} onOpen={stop(onContext)} />}
       <div className="feed-metrics feed-metrics-buttons">
         <button className={liked ? 'liked' : ''} onClick={stop(onLike)} aria-label={liked ? 'Unlike' : 'Like'}><HeartIcon active={liked} /><span>{post.likes + (liked ? 1 : 0)}</span></button>
         <button onClick={stop(onComment)} aria-label="Comments"><CommentIcon /><span>{commentCount}</span></button>
         <button onClick={stop(onShare)} aria-label="Share"><ShareIcon /></button>
       </div>
-      {!detail && (
+      {!detail && !showPrompt && (
         <button className="feed-comment feed-comment-button" onClick={stop(onComment)}>
           <img src={post.commentAvatar} alt={post.commentName} />
           <span><b>{post.commentName}</b> {post.comment}</span>
@@ -368,16 +455,6 @@ function FeedCard({ post, followed, liked, commentCount, onFollow, onLike, onCom
   )
 }
 
-
-function PlazaLayoutSwitch({ layout, onChange }) {
-  return (
-    <div className="plaza-layout-switch" role="group" aria-label="Layout version">
-      {LAYOUTS.map(item => (
-        <button key={item.key} className={layout === item.key ? 'on' : ''} onClick={() => onChange(item.key)} type="button">{item.label}</button>
-      ))}
-    </div>
-  )
-}
 
 function PlazaComposer({ nav }) {
   const openComposer = () => nav('post')
@@ -392,7 +469,6 @@ function PlazaComposer({ nav }) {
     <div className="plaza-composer" role="button" tabIndex={0} onClick={openComposer} onKeyDown={handleKeyDown}>
       <img src={meNav} alt="Joxon" />
       <div className="plaza-composer-field">
-        <b>Joxon</b>
         <span>What's new today?</span>
       </div>
       <button className="plaza-composer-post" type="button" onClick={event => { event.stopPropagation(); openComposer() }}>Post</button>
@@ -437,8 +513,8 @@ function CommentDetail({ post, comments, draft, setDraft, onBack, followed, like
       <header className="comment-detail-top">
         <button className="comment-back-hit" aria-label="Back" onClick={onBack}>←</button>
         <img src={post.avatar} alt={post.name} />
-        <div><b>{post.name}</b><span>{post.time}</span></div>
-        <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={onFollow} aria-label={followed ? 'Chat' : 'Follow'}>{followed ? <ChatBubbleIcon /> : <FollowIcon />}</button>
+        <div className="comment-detail-identity"><b>{post.name}</b><span className="comment-detail-time">{post.time}</span></div>
+        <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={onFollow} aria-label={followed ? 'Chat' : 'Follow'}>{followed ? <ChatBubbleIcon /> : <AvatarFollowPlus />}</button>
         <button className="feed-more" onClick={onMore} aria-label="More">•••</button>
       </header>
       <div className="comment-detail-scroll">
@@ -480,9 +556,10 @@ function CommentDetail({ post, comments, draft, setDraft, onBack, followed, like
   )
 }
 
-export default function PlazaFeed({ nav }) {
+export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDeviceChange = () => {} }) {
   const [tab, setTab] = useState('Explore')
-  const [layout, setLayout] = useState(() => new URLSearchParams(window.location.search).get('layout') === 'edge' ? 'edge' : 'inset')
+  const [deviceMenuOpen, setDeviceMenuOpen] = useState(false)
+  const [portrait45Mode, setPortrait45Mode] = useState('current')
   const [queryOpen, setQueryOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [notice, setNotice] = useState(null)
@@ -505,7 +582,7 @@ export default function PlazaFeed({ nav }) {
     const normalized = query.trim().toLowerCase()
     return POSTS.filter(post => {
       const inTab = tab === 'Explore' || post.tab === tab
-      const inSearch = !normalized || `${post.name} ${post.text} ${post.commentName}`.toLowerCase().includes(normalized)
+      const inSearch = !normalized || `${post.name} ${post.text} ${post.commentName} ${post.tag || ''}`.toLowerCase().includes(normalized)
       return inTab && inSearch
     })
   }, [tab, query])
@@ -524,12 +601,6 @@ export default function PlazaFeed({ nav }) {
   const openDetail = post => { setDetailPost(post); setDraft(''); window.history.pushState({ plazaDetail: post.id }, '', window.location.href) }
   const openImage = (src, post, index = 0) => setImageViewer({ src, post, index, photos: post?.photos?.length ? post.photos : (post?.photo ? [post.photo] : [src]) })
   const pickSearch = text => { setQuery(text); setQueryOpen(false); setTab('Explore') }
-  const changeLayout = next => {
-    setLayout(next)
-    const url = new URL(window.location.href)
-    url.searchParams.set('layout', next)
-    window.history.replaceState(window.history.state, '', url)
-  }
   const sendComment = () => {
     const text = draft.trim()
     if (!text || !detailPost) return
@@ -634,7 +705,7 @@ export default function PlazaFeed({ nav }) {
   }
 
   return (
-    <div className={`screen plaza-screen plaza-${layout}-mode${tab === 'Anonymous' ? ' anonymous-mode' : ''}`} style={tab === 'Anonymous' ? { '--anon-bg': `url(${anonymousStarfield})` } : undefined}>
+    <div className={`screen plaza-screen plaza-inset-mode${portrait45Mode === 'fixed' ? ' portrait-45-fixed' : ''}${tab === 'Anonymous' ? ' anonymous-mode' : ''}`} style={tab === 'Anonymous' ? { '--anon-bg': `url(${anonymousStarfield})` } : undefined}>
       <StatusBar time="17:11" battery={54} />
       <div className="plaza-scroll" ref={scrollRef} onScroll={handlePlazaScroll}>
         <header className="plaza-header">
@@ -654,7 +725,13 @@ export default function PlazaFeed({ nav }) {
           ))}
         </div>
 
-        <PlazaLayoutSwitch layout={layout} onChange={changeLayout} />
+        {tab === 'Explore' && (
+          <div className="portrait-45-demo-switch" role="group" aria-label="Single-image size comparison">
+            <div><b>Common image ratios</b><span>Landscape fills width · portraits stay compact</span></div>
+            <button className={portrait45Mode === 'current' ? 'on' : ''} onClick={() => setPortrait45Mode('current')} type="button">Standard</button>
+            <button className={portrait45Mode === 'fixed' ? 'on' : ''} onClick={() => setPortrait45Mode('fixed')} type="button">Compact</button>
+          </div>
+        )}
 
         {tab === 'Anonymous' && <AnonymousBanner />}
         {tab === 'Explore' && <PlazaComposer nav={nav} />}
@@ -667,11 +744,21 @@ export default function PlazaFeed({ nav }) {
               followed={followed.has(post.id)}
               liked={liked.has(post.id)}
               commentCount={countComments(post)}
-              onFollow={() => followed.has(post.id) ? nav('chat', post.id) : toggleSet(setFollowed, post.id)}
+              onFollow={() => toggleSet(setFollowed, post.id)}
+              onChat={() => nav('chat', post.id)}
               onLike={() => toggleSet(setLiked, post.id)}
               onComment={() => openDetail(post)}
               onShare={() => { toggleSet(setSaved, post.id); flash('Shared to your vibe board') }}
               onMore={() => { toggleSet(setSaved, post.id); flash(saved.has(post.id) ? 'Removed from saved' : 'Saved this post') }}
+              onContext={() => {
+                if (post.tab === 'Anonymous') {
+                  setTab('Anonymous')
+                  flash('Opened anonymous plaza')
+                } else if (post.tag) {
+                  setQuery(post.tag.replace(/^#/, ''))
+                  flash(`Opened ${post.tag}`)
+                }
+              }}
               onOpenImage={openImage}
               onOpenDetail={() => openDetail(post)}
               showPrompt={visiblePromptId === post.id}
@@ -684,6 +771,25 @@ export default function PlazaFeed({ nav }) {
       {queryOpen && <SearchDrawer query={query} setQuery={setQuery} onClose={() => setQueryOpen(false)} onPick={pickSearch} />}
       <ImageViewer viewer={imageViewer} onClose={() => setImageViewer(null)} liked={imageViewer?.post ? liked.has(imageViewer.post.id) : false} commentCount={imageViewer?.post ? countComments(imageViewer.post) : 0} onLike={() => imageViewer?.post && toggleSet(setLiked, imageViewer.post.id)} onShare={() => imageViewer?.post && (toggleSet(setSaved, imageViewer.post.id), flash('Shared to your vibe board'))} draft={draft} setDraft={setDraft} onSend={sendComment} />
       {notice && <div className="plaza-toast">{notice}</div>}
+      {deviceMenuOpen && (
+        <div className="plaza-device-menu" role="dialog" aria-label="Choose preview screen size">
+          <div className="plaza-device-menu-title">Preview screen size</div>
+          {devicePresets.map(item => (
+            <button
+              key={item.key}
+              className={devicePreset?.key === item.key ? 'on' : ''}
+              onClick={() => { onDeviceChange(item); setDeviceMenuOpen(false) }}
+              type="button"
+            >
+              <span>{item.label}</span>
+              <b>{item.width}×{item.height}</b>
+            </button>
+          ))}
+        </div>
+      )}
+      <button className="plaza-device-trigger" onClick={() => setDeviceMenuOpen(open => !open)} type="button" aria-expanded={deviceMenuOpen}>
+        <span>Size</span>{devicePreset?.width}×{devicePreset?.height}
+      </button>
       <button className={`plaza-compose-fab${immersive ? ' show' : ''}`} onClick={() => nav('post')} aria-label="Create post">+</button>
       <div className={`plaza-bottom-shell${immersive ? ' hidden' : ''}`}>
         <BottomNav active="plaza" nav={nav} />
