@@ -32,6 +32,30 @@ import anonymousBannerImg from '../../assets/plaza/anonymous_banner.png'
 import flowersPost from '../../assets/flowers_post.png'
 import roomListImg from '../../assets/rooms/roomlist.png'
 
+const POST_TIME_UNITS = {
+  second: 's',
+  minute: 'm',
+  hour: 'h',
+  day: 'd',
+  week: 'w',
+  month: 'mo',
+  year: 'y',
+}
+
+function formatPostTime(value) {
+  if (!value) return ''
+  const normalized = value.trim().toLowerCase()
+  if (normalized === 'now' || normalized === 'just now') return '1s'
+
+  const relative = normalized.match(/^(\d+)\s+(second|minute|hour|day|week|month|year)s?\s+ago$/)
+  if (relative) return `${relative[1]}${POST_TIME_UNITS[relative[2]]}`
+
+  const singular = normalized.match(/^an?\s+(second|minute|hour|day|week|month|year)\s+ago$/)
+  if (singular) return `1${POST_TIME_UNITS[singular[1]]}`
+
+  return value
+}
+
 function SearchIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#15151c" strokeWidth="2.6" strokeLinecap="round">
@@ -279,23 +303,28 @@ const RELATIONSHIP_DEMO_POSTS = [
     comments: 12, likes: 86, commentName: 'farah', commentAvatar: bethAvatar, comment: 'clean and easy to scan', commentLikes: 3,
   },
   {
-    id: 'state-normal-followed', tab: 'Explore', name: 'farah', time: 'now', avatar: bethAvatar,
+    id: 'state-normal-followed', tab: 'Explore', name: 'farah', time: '1 minute ago', avatar: bethAvatar,
     text: 'Makan siang sederhana, tapi suasananya bikin betah.',
     comments: 18, likes: 104, commentName: 'alyssa', commentAvatar: roseAvatar, comment: 'the relationship state is clear', commentLikes: 5,
   },
   {
-    id: 'state-room-unfollowed', tab: 'Explore', name: 'nadzira', time: 'now', avatar: senjaAvatar, inVoiceRoom: true,
+    id: 'state-room-unfollowed', tab: 'Explore', name: 'nadzira', time: '2 minutes ago', avatar: senjaAvatar, inVoiceRoom: true,
     text: 'Ada yang masih bangun? Kita lagi ngobrol santai di room.',
     comments: 24, likes: 137, commentName: 'safiya', commentAvatar: dedeAvatar, comment: 'no more icon collision', commentLikes: 7,
   },
   {
-    id: 'state-room-followed', tab: 'Explore', name: 'luna', time: 'now', avatar: calistaAvatar, inVoiceRoom: true,
+    id: 'state-room-followed', tab: 'Explore', name: 'luna', time: '1 hour ago', avatar: calistaAvatar, inVoiceRoom: true,
     text: 'The room started quiet and somehow turned into the funniest conversation.',
     comments: 31, likes: 165, commentName: 'nana', commentAvatar: tikaaAvatar, comment: 'this one feels balanced', commentLikes: 9,
   },
 ]
 
 const POSTS = [
+  {
+    id: 'photo-only-post', tab: 'Explore', name: 'mai anh', time: '3 minutes ago', avatar: calistaAvatar,
+    photo: senjaPhoto,
+    comments: 16, likes: 143, commentName: 'nana', commentAvatar: tikaaAvatar, comment: 'this photo feels so peaceful', commentLikes: 8,
+  },
   ...RELATIONSHIP_DEMO_POSTS,
   ...RATIO_AND_TEXT_POSTS,
   {
@@ -518,7 +547,7 @@ function FeedCard({ post, followed, liked, commentCount, onFollow, onChat, onPro
     onOpenDetail?.()
   }
   return (
-    <article className={`feed-card interactive-feed-card${detail ? ' detail-post-card' : ''}`} data-post-id={post.id} onClick={handleCardClick}>
+    <article className={`feed-card interactive-feed-card${detail ? ' detail-post-card' : ''}${post.text ? '' : ' media-only-post'}`} data-post-id={post.id} onClick={handleCardClick}>
       {!detail && (
         <div className={`feed-author${post.inVoiceRoom ? ' in-voice-room' : ''}`}>
           <button className="feed-avatar-action" type="button" onClick={stop(onProfile)} aria-label={`Open ${post.name}'s profile`}>
@@ -528,7 +557,7 @@ function FeedCard({ post, followed, liked, commentCount, onFollow, onChat, onPro
           </button>
           <div className="feed-person">
             <div className="feed-name">{post.name}</div>
-            <div className="feed-time">{post.time}</div>
+            <div className="feed-time" title={post.time} aria-label={post.time}>{formatPostTime(post.time)}</div>
           </div>
           {!post.inVoiceRoom && (
             <button className={`feed-follow${followed ? ' followed' : ''}`} onClick={stop(onFollow)} aria-label={followed ? 'Following' : 'Follow'}>
@@ -540,7 +569,7 @@ function FeedCard({ post, followed, liked, commentCount, onFollow, onChat, onPro
           <button className="feed-more" onClick={stop(onMore)} aria-label="More">•••</button>
         </div>
       )}
-      <p className="feed-text">{post.text}</p>
+      {post.text && <p className="feed-text">{post.text}</p>}
       <MediaGallery post={post} onOpenImage={onOpenImage} />
       {!detail && <PostContextRow post={post} onOpen={stop(onContext)} />}
       <div className="feed-metrics feed-metrics-buttons">
@@ -618,7 +647,7 @@ function CommentDetail({ post, comments, draft, setDraft, onBack, followed, like
       <header className="comment-detail-top">
         <button className="comment-back-hit" aria-label="Back" onClick={onBack}>←</button>
         <img src={post.avatar} alt={post.name} />
-        <div className="comment-detail-identity"><b>{post.name}</b><span className="comment-detail-time">{post.time}</span></div>
+        <div className="comment-detail-identity"><b>{post.name}</b><span className="comment-detail-time" title={post.time} aria-label={post.time}>{formatPostTime(post.time)}</span></div>
         <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={onFollow} aria-label={followed ? 'Chat' : 'Follow'}>{followed ? <ChatBubbleIcon /> : <AvatarFollowPlus />}</button>
         <button className="feed-more" onClick={onMore} aria-label="More">•••</button>
       </header>
