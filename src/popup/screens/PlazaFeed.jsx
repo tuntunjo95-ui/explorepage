@@ -89,6 +89,16 @@ function AvatarFollowCheck() {
   )
 }
 
+function VoiceRoomBadge() {
+  return (
+    <span className="feed-room-badge" aria-hidden="true">
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+        <path d="M2.2 7.2V4.8M4.75 8.55v-5.1M7.3 7.65v-3.3M9.8 6.75v-1.5" stroke="currentColor" strokeWidth="1.45" strokeLinecap="round" />
+      </svg>
+    </span>
+  )
+}
+
 function FollowIcon({ active = false }) {
   if (active) {
     return (
@@ -262,7 +272,31 @@ const TEXT_ONLY_POSTS = [
 
 const RATIO_AND_TEXT_POSTS = RATIO_DEMO_POSTS.flatMap((post, index) => [post, TEXT_ONLY_POSTS[index]])
 
+const RELATIONSHIP_DEMO_POSTS = [
+  {
+    id: 'state-normal-unfollowed', tab: 'Explore', name: 'alyssa', time: 'now', avatar: roseAvatar,
+    text: 'Late-night conversations always feel more honest somehow.',
+    comments: 12, likes: 86, commentName: 'farah', commentAvatar: bethAvatar, comment: 'clean and easy to scan', commentLikes: 3,
+  },
+  {
+    id: 'state-normal-followed', tab: 'Explore', name: 'farah', time: 'now', avatar: bethAvatar,
+    text: 'Makan siang sederhana, tapi suasananya bikin betah.',
+    comments: 18, likes: 104, commentName: 'alyssa', commentAvatar: roseAvatar, comment: 'the relationship state is clear', commentLikes: 5,
+  },
+  {
+    id: 'state-room-unfollowed', tab: 'Explore', name: 'nadzira', time: 'now', avatar: senjaAvatar, inVoiceRoom: true,
+    text: 'Ada yang masih bangun? Kita lagi ngobrol santai di room.',
+    comments: 24, likes: 137, commentName: 'safiya', commentAvatar: dedeAvatar, comment: 'no more icon collision', commentLikes: 7,
+  },
+  {
+    id: 'state-room-followed', tab: 'Explore', name: 'luna', time: 'now', avatar: calistaAvatar, inVoiceRoom: true,
+    text: 'The room started quiet and somehow turned into the funniest conversation.',
+    comments: 31, likes: 165, commentName: 'nana', commentAvatar: tikaaAvatar, comment: 'this one feels balanced', commentLikes: 9,
+  },
+]
+
 const POSTS = [
+  ...RELATIONSHIP_DEMO_POSTS,
   ...RATIO_AND_TEXT_POSTS,
   {
     id: 'single-blue', tab: 'Explore', name: 'Blue sample', time: '1 second ago', avatar: senjaAvatar, photo: colorBlue,
@@ -477,7 +511,7 @@ function PostContextRow({ post, onOpen }) {
   )
 }
 
-function FeedCard({ post, followed, liked, commentCount, onFollow, onChat, onLike, onComment, onShare, onMore, onContext, onOpenImage, onOpenDetail, detail = false, showPrompt = false }) {
+function FeedCard({ post, followed, liked, commentCount, onFollow, onChat, onProfile, onLike, onComment, onShare, onMore, onContext, onOpenImage, onOpenDetail, detail = false, showPrompt = false }) {
   const stop = handler => event => { event.stopPropagation(); handler?.(event) }
   const handleCardClick = event => {
     if (detail || event.target.closest('button, a, input, textarea')) return
@@ -486,16 +520,23 @@ function FeedCard({ post, followed, liked, commentCount, onFollow, onChat, onLik
   return (
     <article className={`feed-card interactive-feed-card${detail ? ' detail-post-card' : ''}`} data-post-id={post.id} onClick={handleCardClick}>
       {!detail && (
-        <div className="feed-author">
-          <img src={post.avatar} alt={post.name} />
+        <div className={`feed-author${post.inVoiceRoom ? ' in-voice-room' : ''}`}>
+          <button className="feed-avatar-action" type="button" onClick={stop(onProfile)} aria-label={`Open ${post.name}'s profile`}>
+            {post.inVoiceRoom && <span className="feed-room-ripple" aria-hidden="true" />}
+            <img src={post.avatar} alt="" />
+            {post.inVoiceRoom && <VoiceRoomBadge />}
+          </button>
           <div className="feed-person">
             <div className="feed-name">{post.name}</div>
             <div className="feed-time">{post.time}</div>
           </div>
-          <button className={`feed-follow${followed ? ' followed' : ''}`} onClick={stop(onFollow)} aria-label={followed ? 'Following' : 'Follow'}>
-            {followed ? <AvatarFollowCheck /> : <AvatarFollowPlus />}
-          </button>
-          {followed && <button className="feed-chat-action" onClick={stop(onChat)} aria-label="Chat">Chat</button>}
+          {!post.inVoiceRoom && (
+            <button className={`feed-follow${followed ? ' followed' : ''}`} onClick={stop(onFollow)} aria-label={followed ? 'Following' : 'Follow'}>
+              {followed ? <AvatarFollowCheck /> : <AvatarFollowPlus />}
+            </button>
+          )}
+          {post.inVoiceRoom && !followed && <button className="feed-relationship-action" onClick={stop(onFollow)} aria-label={`Follow ${post.name}`}>Follow</button>}
+          {followed && <button className="feed-chat-action" onClick={stop(onChat)} aria-label={`Chat with ${post.name}`}>Chat</button>}
           <button className="feed-more" onClick={stop(onMore)} aria-label="More">•••</button>
         </div>
       )}
@@ -623,14 +664,13 @@ function CommentDetail({ post, comments, draft, setDraft, onBack, followed, like
 export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDeviceChange = () => {} }) {
   const [tab, setTab] = useState('Explore')
   const [deviceMenuOpen, setDeviceMenuOpen] = useState(false)
-  const [portrait45Mode, setPortrait45Mode] = useState('current')
   const [queryOpen, setQueryOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [notice, setNotice] = useState(null)
   const [detailPost, setDetailPost] = useState(null)
   const [draft, setDraft] = useState('')
   const [commentsByPost, setCommentsByPost] = useState(BASE_COMMENTS)
-  const [followed, setFollowed] = useState(() => new Set(['beth']))
+  const [followed, setFollowed] = useState(() => new Set(['state-normal-followed', 'state-room-followed']))
   const [liked, setLiked] = useState(() => new Set())
   const [saved, setSaved] = useState(() => new Set())
   const [visiblePromptId, setVisiblePromptId] = useState(null)
@@ -797,7 +837,7 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
   }
 
   return (
-    <div className={`screen plaza-screen plaza-inset-mode${portrait45Mode === 'fixed' ? ' portrait-45-fixed' : ''}${tab === 'Anonymous' ? ' anonymous-mode' : ''}`} style={tab === 'Anonymous' ? { '--anon-bg': `url(${anonymousStarfield})` } : undefined}>
+    <div className={`screen plaza-screen plaza-inset-mode${tab === 'Anonymous' ? ' anonymous-mode' : ''}`} style={tab === 'Anonymous' ? { '--anon-bg': `url(${anonymousStarfield})` } : undefined}>
       <StatusBar time="17:11" battery={54} />
       <div className="plaza-scroll" ref={scrollRef} onScroll={handlePlazaScroll}>
         <header className="plaza-header">
@@ -817,14 +857,6 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
           ))}
         </div>
 
-        {tab === 'Explore' && (
-          <div className="portrait-45-demo-switch" role="group" aria-label="Single-image size comparison">
-            <div><b>Common image ratios</b><span>Landscape fills width · portraits stay compact</span></div>
-            <button className={portrait45Mode === 'current' ? 'on' : ''} onClick={() => setPortrait45Mode('current')} type="button">Standard</button>
-            <button className={portrait45Mode === 'fixed' ? 'on' : ''} onClick={() => setPortrait45Mode('fixed')} type="button">Compact</button>
-          </div>
-        )}
-
         {tab === 'Anonymous' && <AnonymousBanner />}
         {tab === 'Explore' && <PlazaComposer nav={nav} />}
 
@@ -838,6 +870,7 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
               commentCount={countComments(post)}
               onFollow={() => toggleSet(setFollowed, post.id)}
               onChat={() => nav('chat', post.id)}
+              onProfile={() => nav('other', post.id)}
               onLike={() => toggleSet(setLiked, post.id)}
               onComment={() => openDetail(post)}
               onShare={() => { toggleSet(setSaved, post.id); flash('Shared to your vibe board') }}
