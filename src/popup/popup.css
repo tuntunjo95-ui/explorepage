@@ -4222,7 +4222,7 @@ body {
   min-width: 44px;
   height: 44px;
   margin: 0;
-  padding: 0 0 7px;
+  padding: 3px 0 0;
   font-size: 16px;
 }
 
@@ -4238,6 +4238,11 @@ body {
 
 .detail-post-card .feed-text {
   margin-left: 0;
+}
+
+.media-only-post:not(.detail-post-card) .feed-photo-button,
+.media-only-post:not(.detail-post-card) .feed-gallery-window {
+  margin-top: 8px;
 }
 
 .feed-context-row {
