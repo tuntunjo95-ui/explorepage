@@ -3966,11 +3966,6 @@ body {
   max-height: none;
 }
 
-.portrait-45-fixed .feed-photo-button.single-ratio-demo {
-  --ratio-demo-max-width: min(calc(100cqw - 52px), 272px);
-  --ratio-demo-max-height: min(calc(var(--vh) * .40), 340px);
-}
-
 .feed-photo-button.single-ratio-demo.single-landscape {
   --ratio-demo-width: calc(100cqw - 52px);
 }
@@ -4031,13 +4026,77 @@ body {
   gap: 0;
 }
 
-.feed-author > img {
+.feed-author > img,
+.feed-author .feed-avatar-action {
   position: absolute;
   top: 0;
   left: 0;
   width: 36px;
   height: 36px;
   flex: 0 0 36px;
+}
+
+.feed-avatar-action {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 4px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.feed-author .feed-avatar-action {
+  top: -4px;
+  left: -4px;
+  width: 44px;
+  height: 44px;
+  overflow: visible;
+}
+
+.feed-avatar-action > img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.feed-room-ripple {
+  position: absolute;
+  z-index: 0;
+  inset: 2px;
+  border: 1.5px solid rgba(111, 91, 237, .52);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: feed-room-ripple 1.8s cubic-bezier(.2, .7, .2, 1) infinite;
+}
+
+.feed-room-badge {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #ef5f87;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(45, 35, 72, .22);
+}
+
+@keyframes feed-room-ripple {
+  0% { opacity: .65; transform: scale(.88); }
+  70%, 100% { opacity: 0; transform: scale(1.28); }
 }
 
 .feed-person {
@@ -4114,6 +4173,45 @@ body {
   font-size: 12px;
   line-height: 24px;
   font-weight: 600;
+}
+
+.feed-author .feed-relationship-action {
+  position: absolute;
+  z-index: 1;
+  top: -4px;
+  right: 38px;
+  width: 56px;
+  height: 26px;
+  padding: 0 11px;
+  border: 1px solid #dcdce2;
+  border-radius: 15px;
+  background: #fff;
+  color: #242429;
+  box-shadow: 0 1px 2px rgba(23, 23, 27, .04);
+  font-family: Montserrat, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.feed-author .feed-chat-action,
+.feed-author .feed-relationship-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1px;
+  padding-bottom: 0;
+  line-height: 1;
+  text-align: center;
+}
+
+.feed-author .feed-chat-action::after,
+.feed-author .feed-relationship-action::after {
+  content: "";
+  position: absolute;
+  inset: -9px -4px;
 }
 
 .feed-author .feed-more {
@@ -4306,6 +4404,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .feed-metrics-buttons button.liked .feed-heart-icon,
+  .feed-room-ripple,
   .preload-skeleton-avatar,
   .preload-skeleton-copy i {
     animation: none;
