@@ -215,14 +215,44 @@ const IMAGE_META = {
 
 const SOLID_COLOR_IMAGES = new Set([colorBlue, colorGreen, colorPurple, colorOrange, colorRed])
 
+const makeRatioPreview = (label, width, height, colors) => {
+  const [start, end] = colors
+  const fontSize = Math.max(28, Math.round(Math.min(width, height) * .12))
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="${start}"/>
+          <stop offset="1" stop-color="${end}"/>
+        </linearGradient>
+        <radialGradient id="glow" cx="72%" cy="24%" r="56%">
+          <stop offset="0" stop-color="#fff" stop-opacity=".52"/>
+          <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#sky)"/>
+      <rect width="100%" height="100%" fill="url(#glow)"/>
+      <circle cx="78%" cy="24%" r="${Math.min(width, height) * .13}" fill="#fff" fill-opacity=".5"/>
+      <path d="M0 ${height * .74} Q ${width * .25} ${height * .58} ${width * .5} ${height * .73} T ${width} ${height * .66} V ${height} H0Z" fill="#1f2848" fill-opacity=".38"/>
+      <path d="M0 ${height * .84} Q ${width * .31} ${height * .7} ${width * .6} ${height * .83} T ${width} ${height * .76} V ${height} H0Z" fill="#11172f" fill-opacity=".34"/>
+      <text x="${width / 2}" y="${height / 2}" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}" font-weight="700" letter-spacing="1">${label}</text>
+    </svg>`
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`
+}
+
 const RATIO_DEMOS = [
-  ['16:9', 16 / 9],
-  ['4:3', 4 / 3],
-  ['1:1', 1],
-  ['4:5', 4 / 5],
-  ['3:4', 3 / 4],
-  ['2:3', 2 / 3],
-  ['9:16', 9 / 16],
+  ['16:9', 16 / 9, makeRatioPreview('16:9', 1600, 900, ['#6a8fde', '#f1a46f'])],
+  ['4:3', 4 / 3, makeRatioPreview('4:3', 1200, 900, ['#7c73d8', '#e4a1bd'])],
+  ['1:1', 1, makeRatioPreview('1:1', 1000, 1000, ['#7199c8', '#74c7ae'])],
+  ['4:5', 4 / 5, makeRatioPreview('4:5', 800, 1000, ['#ba83cc', '#efa379'])],
+  ['3:4', 3 / 4, makeRatioPreview('3:4', 750, 1000, ['#5f8fd1', '#8fcab1'])],
+  ['2:3', 2 / 3, makeRatioPreview('2:3', 800, 1200, ['#6866c7', '#d889ad'])],
+  ['9:16', 9 / 16, makeRatioPreview('9:16', 900, 1600, ['#547ebc', '#b37bc6'])],
+  ['9:19.5', 9 / 19.5, makeRatioPreview('9:19.5', 1080, 2340, ['#3e669e', '#9c78b8'])],
+  ['9:20', 9 / 20, makeRatioPreview('9:20', 1080, 2400, ['#355d91', '#8b70ad'])],
+  ['1:5', 1 / 5, makeRatioPreview('1:5', 240, 1200, ['#315987', '#8b6aa6'])],
+  ['5:1', 5, makeRatioPreview('5:1', 1500, 300, ['#466da4', '#c58d75'])],
+  ['6:1', 6, makeRatioPreview('6:1', 1800, 300, ['#4b70a9', '#d38b71'])],
 ]
 
 const RATIO_DEMO_COPY = [
@@ -233,15 +263,20 @@ const RATIO_DEMO_COPY = [
   { name: 'safiya', text: 'Found a quiet corner and stayed there longer than planned.', comment: 'such a calm place' },
   { name: 'nana', text: 'Weekend mood: good music, cold drinks, no rush.', comment: 'perfect weekend' },
   { name: 'luna', text: 'Some days feel softer when you stop trying to hurry.', comment: 'I love this feeling' },
+  { name: 'amira', text: 'A full-screen moment from today, saved exactly as it appeared.', comment: 'this feels like a real phone capture' },
+  { name: 'selin', text: 'The whole screen told the story better than a cropped frame.', comment: 'keep the full screenshot' },
+  { name: 'safiya', text: 'A very tall image to check the minimum-width crop.', comment: 'the center stays readable' },
+  { name: 'farah', text: 'A wide panorama that should still keep its original ratio.', comment: 'the whole view still fits' },
+  { name: 'nana', text: 'A very wide image to check the minimum-height crop.', comment: 'the middle stays in focus' },
 ]
 
-const RATIO_DEMO_POSTS = RATIO_DEMOS.map(([label, mediaRatio], index) => ({
+const RATIO_DEMO_POSTS = RATIO_DEMOS.map(([label, mediaRatio, photo], index) => ({
   id: `single-ratio-${label.replace(':', '-')}`,
   tab: 'Explore',
   name: RATIO_DEMO_COPY[index].name,
   time: 'now',
   avatar: senjaAvatar,
-  photo: senjaPhoto,
+  photo,
   mediaRatio,
   ratioDemo: true,
   text: RATIO_DEMO_COPY[index].text,
@@ -294,7 +329,9 @@ const TEXT_ONLY_POSTS = [
   },
 ]
 
-const RATIO_AND_TEXT_POSTS = RATIO_DEMO_POSTS.flatMap((post, index) => [post, TEXT_ONLY_POSTS[index]])
+const RATIO_AND_TEXT_POSTS = RATIO_DEMO_POSTS.flatMap((post, index) => (
+  TEXT_ONLY_POSTS[index] ? [post, TEXT_ONLY_POSTS[index]] : [post]
+))
 
 const RELATIONSHIP_DEMO_POSTS = [
   {
@@ -456,8 +493,9 @@ function MediaGallery({ post, onOpenImage }) {
   if (photos.length === 1) {
     const ratio = post.mediaRatio || IMAGE_META[photos[0]]?.ratio || 1
     const singleKind = ratio < 0.9 ? 'portrait' : ratio > 1.2 ? 'landscape' : 'square'
+    const extremePortraitClass = ratio <= 0.6 ? ' single-extreme-portrait' : ''
     return (
-      <button className={`feed-photo-button single-${singleKind}${post.ratioDemo ? ' single-ratio-demo' : ''}${isSolidColorMedia ? ' solid-color-media' : ''}`} style={{ '--media-ratio': ratio }} onClick={event => { event.stopPropagation(); onOpenImage(photos[0], post, 0) }} aria-label="View image">
+      <button className={`feed-photo-button single-${singleKind}${extremePortraitClass}${post.ratioDemo ? ' single-ratio-demo' : ''}${isSolidColorMedia ? ' solid-color-media' : ''}`} style={{ '--media-ratio': ratio }} onClick={event => { event.stopPropagation(); onOpenImage(photos[0], post, 0) }} aria-label="View image">
         <img className="feed-photo" src={photos[0]} alt="" loading="lazy" />
       </button>
     )

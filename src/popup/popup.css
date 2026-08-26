@@ -3957,19 +3957,6 @@ body {
   color: #fff;
 }
 
-.feed-photo-button.single-ratio-demo {
-  --ratio-demo-max-width: min(calc(100cqw - 52px), 300px);
-  --ratio-demo-max-height: min(calc(var(--vh) * .44), 375px);
-  --ratio-demo-width: min(var(--ratio-demo-max-width), calc(var(--ratio-demo-max-height) * var(--media-ratio)));
-  width: var(--ratio-demo-width);
-  height: calc(var(--ratio-demo-width) / var(--media-ratio));
-  max-height: none;
-}
-
-.feed-photo-button.single-ratio-demo.single-landscape {
-  --ratio-demo-width: calc(100cqw - 52px);
-}
-
 /* Author identity stays compact: name and time share one baseline. */
 .feed-person {
   display: flex;
@@ -4366,31 +4353,33 @@ body {
   100% { background-position: -120% 0; }
 }
 
-/* One rule set for real photos and the earlier solid-color QA posts. */
+/* Canonical single-image rule for real photos, ratio demos, and solid-color QA posts. */
 .interactive-feed-card {
-  --single-square-size: min(calc(100cqw - 52px), 300px);
+  --single-max-image-width: min(calc(100cqw - 52px), 311px);
+  --single-max-display-height: 415px;
+  --single-min-image-width: min(100px, var(--single-max-image-width));
+  --single-min-display-height: 60px;
   --responsive-multi-height: clamp(216px, calc(var(--vh) * .27), 235px);
 }
 
-.feed-photo-button.single-landscape {
-  width: calc(100cqw - 52px);
-  height: min(calc((100cqw - 52px) / var(--media-ratio)), 235px);
-  max-height: 235px;
-}
-
-.feed-photo-button.single-square {
-  width: var(--single-square-size);
-  height: var(--single-square-size);
-  max-height: 300px;
-}
-
+.feed-photo-button.single-landscape,
+.feed-photo-button.single-square,
 .feed-photo-button.single-portrait {
-  --responsive-portrait-height: min(calc((100cqw - 52px) / var(--media-ratio)), min(calc(var(--vh) * .44), 375px));
-  width: calc(var(--responsive-portrait-height) * var(--media-ratio));
-  height: var(--responsive-portrait-height);
-  max-height: 375px;
+  --single-active-display-height: var(--single-max-display-height);
+  --single-natural-height: calc(var(--single-max-image-width) / var(--media-ratio));
+  --single-fitted-height: clamp(var(--single-min-display-height), var(--single-natural-height), var(--single-active-display-height));
+  width: clamp(var(--single-min-image-width), calc(var(--single-fitted-height) * var(--media-ratio)), var(--single-max-image-width));
+  height: var(--single-fitted-height);
+  max-width: var(--single-max-image-width);
+  max-height: var(--single-active-display-height);
+  aspect-ratio: auto;
 }
 
+.feed-photo-button.single-extreme-portrait {
+  --single-active-display-height: var(--single-max-display-height);
+}
+
+.feed-photo-button .feed-photo,
 .feed-photo-button.solid-color-media .feed-photo,
 .feed-gallery-window.solid-color-media .feed-gallery-img {
   object-fit: cover;
