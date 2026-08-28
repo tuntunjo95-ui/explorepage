@@ -3849,6 +3849,31 @@ body {
   font-weight: 550;
 }
 
+.plaza-action-variant-trigger {
+  position: fixed;
+  right: max(122px, calc((100vw - min(var(--vw), 100vw)) / 2 + 122px));
+  bottom: 96px;
+  z-index: 48;
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid rgba(36, 36, 41, .12);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, .96);
+  box-shadow: 0 6px 18px rgba(38, 32, 90, .16);
+  color: #242429;
+  font-size: 11px;
+  font-weight: 650;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.plaza-action-variant-trigger span {
+  color: #777780;
+  font-weight: 550;
+}
+
 .plaza-device-menu {
   position: fixed;
   right: max(10px, calc((100vw - min(var(--vw), 100vw)) / 2 + 10px));
@@ -3897,13 +3922,62 @@ body {
   color: #5f52dd;
 }
 
+.plaza-action-variant-menu {
+  position: fixed;
+  right: max(10px, calc((100vw - min(var(--vw), 100vw)) / 2 + 10px));
+  bottom: 138px;
+  z-index: 49;
+  width: 190px;
+  padding: 8px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .98);
+  box-shadow: 0 14px 38px rgba(30, 28, 50, .22);
+}
+
+.plaza-action-variant-menu-title {
+  padding: 5px 7px 7px;
+  color: #74747d;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.plaza-action-variant-menu button {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #3d3d44;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  text-align: left;
+}
+
+.plaza-action-variant-menu button.on {
+  background: #f0eefc;
+  color: #5f52dd;
+  font-weight: 680;
+}
+
 .anonymous-mode .plaza-device-trigger {
   border-color: rgba(255, 255, 255, .18);
   background: rgba(26, 24, 42, .90);
   color: #fff;
 }
 
+.anonymous-mode .plaza-action-variant-trigger {
+  border-color: rgba(255, 255, 255, .18);
+  background: rgba(26, 24, 42, .90);
+  color: #fff;
+}
+
 .anonymous-mode .plaza-device-trigger span {
+  color: rgba(255, 255, 255, .68);
+}
+
+.anonymous-mode .plaza-action-variant-trigger span {
   color: rgba(255, 255, 255, .68);
 }
 

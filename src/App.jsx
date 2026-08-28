@@ -44,18 +44,32 @@ const DEVICE_PRESETS = [
   { key: 'large', label: 'Large / Max', width: 430, height: 932 },
 ]
 
+const PLAZA_ACTION_VARIANTS = [
+  { key: 'standard', label: 'Current' },
+  { key: 'none', label: 'No Follow / Chat' },
+  { key: 'follow-only', label: 'No Chat' },
+]
+
 export default function App() {
   const [screen, setScreen] = useState(qs.get('s') || 'message')
   const [param, setParam] = useState(qs.get('p') || null)
   const [deviceKey, setDeviceKey] = useState(qs.get('device') || 'iphone-pro')
+  const [plazaActionVariantKey, setPlazaActionVariantKey] = useState(qs.get('actions') || 'standard')
   // 同频信号方案对比器的选中态托管在 App 级，进私聊再返回时不丢失（修复返回总回到轻量的 bug）
   const [scheme, setScheme] = useState(qs.get('scheme') || 'a')
   const nav = (s, p = null) => { setScreen(s); setParam(p) }
   const devicePreset = DEVICE_PRESETS.find(item => item.key === deviceKey) || DEVICE_PRESETS[3]
+  const plazaActionVariant = PLAZA_ACTION_VARIANTS.find(item => item.key === plazaActionVariantKey) || PLAZA_ACTION_VARIANTS[0]
   const changeDevice = next => {
     setDeviceKey(next.key)
     const url = new URL(window.location.href)
     url.searchParams.set('device', next.key)
+    window.history.replaceState(window.history.state, '', url)
+  }
+  const changePlazaActionVariant = next => {
+    setPlazaActionVariantKey(next.key)
+    const url = new URL(window.location.href)
+    url.searchParams.set('actions', next.key)
     window.history.replaceState(window.history.state, '', url)
   }
 
@@ -72,7 +86,7 @@ export default function App() {
     case 'other': view = <OtherProfile nav={nav} peer={param} />; break
     case 'match': view = <MatchHome nav={nav} />; break
     case 'rooms': view = <RoomList nav={nav} />; break
-    case 'plaza': view = <PlazaFeed nav={nav} devicePreset={devicePreset} devicePresets={DEVICE_PRESETS} onDeviceChange={changeDevice} />; break
+    case 'plaza': view = <PlazaFeed nav={nav} devicePreset={devicePreset} devicePresets={DEVICE_PRESETS} onDeviceChange={changeDevice} actionVariant={plazaActionVariant} actionVariants={PLAZA_ACTION_VARIANTS} onActionVariantChange={changePlazaActionVariant} />; break
     case 'me': view = <MyProfile nav={nav} />; break
     case 'profile-edit': view = <ProfileEdit nav={nav} />; break
     case 'vibe': view = <VibeTest nav={nav} />; break

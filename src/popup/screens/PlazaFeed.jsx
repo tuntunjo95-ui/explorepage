@@ -578,8 +578,10 @@ function PostContextRow({ post, onOpen }) {
   )
 }
 
-function FeedCard({ post, followed, liked, commentCount, onFollow, onChat, onProfile, onLike, onComment, onShare, onMore, onContext, onOpenImage, onOpenDetail, detail = false, showPrompt = false }) {
+function FeedCard({ post, followed, liked, commentCount, onFollow, onChat, onProfile, onLike, onComment, onShare, onMore, onContext, onOpenImage, onOpenDetail, actionVariant = 'standard', detail = false, showPrompt = false }) {
   const stop = handler => event => { event.stopPropagation(); handler?.(event) }
+  const showFollowAction = actionVariant !== 'none'
+  const showChatAction = actionVariant === 'standard'
   const handleCardClick = event => {
     if (detail || event.target.closest('button, a, input, textarea')) return
     onOpenDetail?.()
@@ -597,13 +599,13 @@ function FeedCard({ post, followed, liked, commentCount, onFollow, onChat, onPro
             <div className="feed-name">{post.name}</div>
             <div className="feed-time" title={post.time} aria-label={post.time}>{formatPostTime(post.time)}</div>
           </div>
-          {!post.inVoiceRoom && (
+          {showFollowAction && !post.inVoiceRoom && (
             <button className={`feed-follow${followed ? ' followed' : ''}`} onClick={stop(onFollow)} aria-label={followed ? 'Following' : 'Follow'}>
               {followed ? <AvatarFollowCheck /> : <AvatarFollowPlus />}
             </button>
           )}
-          {post.inVoiceRoom && !followed && <button className="feed-relationship-action" onClick={stop(onFollow)} aria-label={`Follow ${post.name}`}>Follow</button>}
-          {followed && <button className="feed-chat-action" onClick={stop(onChat)} aria-label={`Chat with ${post.name}`}>Chat</button>}
+          {showFollowAction && post.inVoiceRoom && !followed && <button className="feed-relationship-action" onClick={stop(onFollow)} aria-label={`Follow ${post.name}`}>Follow</button>}
+          {showChatAction && followed && <button className="feed-chat-action" onClick={stop(onChat)} aria-label={`Chat with ${post.name}`}>Chat</button>}
           <button className="feed-more" onClick={stop(onMore)} aria-label="More">•••</button>
         </div>
       )}
@@ -678,7 +680,10 @@ function SearchDrawer({ query, setQuery, onClose, onPick }) {
   )
 }
 
-function CommentDetail({ post, comments, draft, setDraft, onBack, followed, liked, commentCount, onFollow, onLike, onShare, onMore, onOpenImage, onSend }) {
+function CommentDetail({ post, comments, draft, setDraft, onBack, followed, liked, commentCount, onFollow, onLike, onShare, onMore, onOpenImage, onSend, actionVariant = 'standard' }) {
+  const showFollowAction = actionVariant !== 'none'
+  const showChatAction = actionVariant === 'standard'
+  const showRelationshipAction = showFollowAction && (!followed || showChatAction)
   return (
     <div className="screen plaza-screen comment-detail-screen">
       <StatusBar time="17:11" battery={54} />
@@ -686,7 +691,7 @@ function CommentDetail({ post, comments, draft, setDraft, onBack, followed, like
         <button className="comment-back-hit" aria-label="Back" onClick={onBack}>←</button>
         <img src={post.avatar} alt={post.name} />
         <div className="comment-detail-identity"><b>{post.name}</b><span className="comment-detail-time" title={post.time} aria-label={post.time}>{formatPostTime(post.time)}</span></div>
-        <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={onFollow} aria-label={followed ? 'Chat' : 'Follow'}>{followed ? <ChatBubbleIcon /> : <AvatarFollowPlus />}</button>
+        {showRelationshipAction && <button className={`feed-follow${followed ? ' chat-ready' : ''}`} onClick={onFollow} aria-label={followed ? 'Chat' : 'Follow'}>{followed ? <ChatBubbleIcon /> : <AvatarFollowPlus />}</button>}
         <button className="feed-more" onClick={onMore} aria-label="More">•••</button>
       </header>
       <div className="comment-detail-scroll">
@@ -728,9 +733,10 @@ function CommentDetail({ post, comments, draft, setDraft, onBack, followed, like
   )
 }
 
-export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDeviceChange = () => {} }) {
+export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDeviceChange = () => {}, actionVariant = { key: 'standard', label: 'Current' }, actionVariants = [], onActionVariantChange = () => {} }) {
   const [tab, setTab] = useState('Explore')
   const [deviceMenuOpen, setDeviceMenuOpen] = useState(false)
+  const [actionVariantMenuOpen, setActionVariantMenuOpen] = useState(false)
   const [queryOpen, setQueryOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [notice, setNotice] = useState(null)
@@ -897,6 +903,7 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
         onMore={() => { toggleSet(setSaved, detailPost.id); flash(saved.has(detailPost.id) ? 'Removed from saved' : 'Saved this post') }}
         onOpenImage={openImage}
         onSend={sendComment}
+        actionVariant={actionVariant.key}
       />
         <ImageViewer viewer={imageViewer} onClose={() => setImageViewer(null)} liked={imageViewer?.post ? liked.has(imageViewer.post.id) : false} commentCount={imageViewer?.post ? countComments(imageViewer.post) : 0} onLike={() => imageViewer?.post && toggleSet(setLiked, imageViewer.post.id)} onShare={() => imageViewer?.post && (toggleSet(setSaved, imageViewer.post.id), flash('Shared to your vibe board'))} draft={draft} setDraft={setDraft} onSend={sendComment} />
       </>
@@ -904,7 +911,7 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
   }
 
   return (
-    <div className={`screen plaza-screen plaza-inset-mode${tab === 'Anonymous' ? ' anonymous-mode' : ''}`} style={tab === 'Anonymous' ? { '--anon-bg': `url(${anonymousStarfield})` } : undefined}>
+    <div className={`screen plaza-screen plaza-inset-mode${tab === 'Anonymous' ? ' anonymous-mode' : ''}`} data-action-variant={actionVariant.key} style={tab === 'Anonymous' ? { '--anon-bg': `url(${anonymousStarfield})` } : undefined}>
       <StatusBar time="17:11" battery={54} />
       <div className="plaza-scroll" ref={scrollRef} onScroll={handlePlazaScroll}>
         <header className="plaza-header">
@@ -953,6 +960,7 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
               }}
               onOpenImage={openImage}
               onOpenDetail={() => openDetail(post)}
+              actionVariant={actionVariant.key}
               showPrompt={visiblePromptId === post.id}
             />
           ))}
@@ -964,6 +972,21 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
       {queryOpen && <SearchDrawer query={query} setQuery={setQuery} onClose={() => setQueryOpen(false)} onPick={pickSearch} />}
       <ImageViewer viewer={imageViewer} onClose={() => setImageViewer(null)} liked={imageViewer?.post ? liked.has(imageViewer.post.id) : false} commentCount={imageViewer?.post ? countComments(imageViewer.post) : 0} onLike={() => imageViewer?.post && toggleSet(setLiked, imageViewer.post.id)} onShare={() => imageViewer?.post && (toggleSet(setSaved, imageViewer.post.id), flash('Shared to your vibe board'))} draft={draft} setDraft={setDraft} onSend={sendComment} />
       {notice && <div className="plaza-toast">{notice}</div>}
+      {actionVariantMenuOpen && (
+        <div className="plaza-action-variant-menu" role="dialog" aria-label="Choose post action style">
+          <div className="plaza-action-variant-menu-title">Post actions</div>
+          {actionVariants.map(item => (
+            <button
+              key={item.key}
+              className={actionVariant.key === item.key ? 'on' : ''}
+              onClick={() => { onActionVariantChange(item); setActionVariantMenuOpen(false) }}
+              type="button"
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
       {deviceMenuOpen && (
         <div className="plaza-device-menu" role="dialog" aria-label="Choose preview screen size">
           <div className="plaza-device-menu-title">Preview screen size</div>
@@ -980,7 +1003,10 @@ export default function PlazaFeed({ nav, devicePreset, devicePresets = [], onDev
           ))}
         </div>
       )}
-      <button className="plaza-device-trigger" onClick={() => setDeviceMenuOpen(open => !open)} type="button" aria-expanded={deviceMenuOpen}>
+      <button className="plaza-action-variant-trigger" onClick={() => { setActionVariantMenuOpen(open => !open); setDeviceMenuOpen(false) }} type="button" aria-expanded={actionVariantMenuOpen}>
+        <span>Actions</span>{actionVariant.label}
+      </button>
+      <button className="plaza-device-trigger" onClick={() => { setDeviceMenuOpen(open => !open); setActionVariantMenuOpen(false) }} type="button" aria-expanded={deviceMenuOpen}>
         <span>Size</span>{devicePreset?.width}×{devicePreset?.height}
       </button>
       <button className={`plaza-compose-fab${immersive ? ' show' : ''}`} onClick={() => nav('post')} aria-label="Create post">+</button>
