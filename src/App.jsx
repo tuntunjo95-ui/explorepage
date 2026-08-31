@@ -50,16 +50,23 @@ const PLAZA_ACTION_VARIANTS = [
   { key: 'follow-only', label: 'No Chat' },
 ]
 
+const PLAZA_METRIC_VARIANTS = [
+  { key: 'current', label: 'Current' },
+  { key: 'thirds', label: 'Equal thirds' },
+]
+
 export default function App() {
   const [screen, setScreen] = useState(qs.get('s') || 'message')
   const [param, setParam] = useState(qs.get('p') || null)
   const [deviceKey, setDeviceKey] = useState(qs.get('device') || 'iphone-pro')
   const [plazaActionVariantKey, setPlazaActionVariantKey] = useState(qs.get('actions') || 'standard')
+  const [plazaMetricVariantKey, setPlazaMetricVariantKey] = useState(qs.get('metrics') || 'current')
   // 同频信号方案对比器的选中态托管在 App 级，进私聊再返回时不丢失（修复返回总回到轻量的 bug）
   const [scheme, setScheme] = useState(qs.get('scheme') || 'a')
   const nav = (s, p = null) => { setScreen(s); setParam(p) }
   const devicePreset = DEVICE_PRESETS.find(item => item.key === deviceKey) || DEVICE_PRESETS[3]
   const plazaActionVariant = PLAZA_ACTION_VARIANTS.find(item => item.key === plazaActionVariantKey) || PLAZA_ACTION_VARIANTS[0]
+  const plazaMetricVariant = PLAZA_METRIC_VARIANTS.find(item => item.key === plazaMetricVariantKey) || PLAZA_METRIC_VARIANTS[0]
   const changeDevice = next => {
     setDeviceKey(next.key)
     const url = new URL(window.location.href)
@@ -70,6 +77,12 @@ export default function App() {
     setPlazaActionVariantKey(next.key)
     const url = new URL(window.location.href)
     url.searchParams.set('actions', next.key)
+    window.history.replaceState(window.history.state, '', url)
+  }
+  const changePlazaMetricVariant = next => {
+    setPlazaMetricVariantKey(next.key)
+    const url = new URL(window.location.href)
+    url.searchParams.set('metrics', next.key)
     window.history.replaceState(window.history.state, '', url)
   }
 
@@ -86,7 +99,7 @@ export default function App() {
     case 'other': view = <OtherProfile nav={nav} peer={param} />; break
     case 'match': view = <MatchHome nav={nav} />; break
     case 'rooms': view = <RoomList nav={nav} />; break
-    case 'plaza': view = <PlazaFeed nav={nav} devicePreset={devicePreset} devicePresets={DEVICE_PRESETS} onDeviceChange={changeDevice} actionVariant={plazaActionVariant} actionVariants={PLAZA_ACTION_VARIANTS} onActionVariantChange={changePlazaActionVariant} />; break
+    case 'plaza': view = <PlazaFeed nav={nav} devicePreset={devicePreset} devicePresets={DEVICE_PRESETS} onDeviceChange={changeDevice} actionVariant={plazaActionVariant} actionVariants={PLAZA_ACTION_VARIANTS} onActionVariantChange={changePlazaActionVariant} metricVariant={plazaMetricVariant} metricVariants={PLAZA_METRIC_VARIANTS} onMetricVariantChange={changePlazaMetricVariant} />; break
     case 'me': view = <MyProfile nav={nav} />; break
     case 'profile-edit': view = <ProfileEdit nav={nav} />; break
     case 'vibe': view = <VibeTest nav={nav} />; break
